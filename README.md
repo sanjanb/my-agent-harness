@@ -20,64 +20,216 @@ A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](htt
 
 ▸ Architecture
 
-The harness operates on a **3-layer separation of concerns** that maximizes reliability by keeping probabilistic LLM decisions away from deterministic business logic.
+The harness operates on a **4-layer architecture** that separates concerns from human intent through to deterministic execution, keeping probabilistic LLM decisions safely away from business logic.
 
 ```mermaid
 graph TD
-    subgraph "Layer 1 — Directive"
-        DIR1["AGENTS.md<br/>System instructions"]
-        DIR2["tools/philosophy.md<br/>Code philosophy mandates"]
-        DIR3["Agent definitions<br/>(14 agents)"]
-        DIR4["commands/review.md<br/>Custom commands"]
+    subgraph L1["Layer 1 — Intent (Human Layer)"]
+        INT1["User requests<br/>& commands"]
+        INT2["profiles/<br/>Environment configs"]
+        INT3["AGENTS.md<br/>Workflow rules"]
     end
 
-    subgraph "Layer 2 — Orchestration"
-        ORCH["OpenCode Orchestrator<br/>(model routing via oh-my-opencode-slim)"]
-        ORCH -->|"delegates to"| AGENTS["14 Specialist Agents<br/>(planning / dev / research / content / review)"]
-        ORCH -->|"routes via"| MODELS["mimo-v2.5-free / deepseek-v4-flash-free"]
-        ORCH -->|"loads"| SKILLS["Skills + Philosophies"]
+    subgraph L2["Layer 2 — Directive (Config Layer)"]
+        DIR1["opencode.jsonc<br/>Plugins, MCPs, permissions"]
+        DIR2["oh-my-opencode-slim.json<br/>Model routing + presets"]
+        DIR3["Agent definitions<br/>14 agents, 6 categories"]
+        DIR4["tools/philosophy.md<br/>Code philosophy mandates"]
     end
 
-    subgraph "Layer 3 — Execution"
-        EXEC1["background-agents.ts<br/>Unified delegation system"]
-        EXEC2["worktree.ts<br/>Worktree management"]
-        EXEC3["notify.ts<br/>Notifications"]
-        EXEC4["kdco-primitives/<br/>Temporal / shell / mutex / cmux"]
-        EXEC5["MCP Servers<br/>context7 / composio / exa / gh_grep"]
+    subgraph L3["Layer 3 — Orchestration (AI Layer)"]
+        ORCH["OpenCode Orchestrator<br/>Reads directives → routes work"]
+        AGENTS["14 Specialist Agents<br/>planning / dev / research /<br/>content / review / orchestration"]
+        MODELS["Model Routing<br/>mimo-v2.5-free (orchestrator)<br/>deepseek-v4-flash-free (workers)"]
+        SKILLS["Skill Registry<br/>gstack / mp-* / managed"]
     end
+
+    subgraph L4["Layer 4 — Execution (Runtime Layer)"]
+        PLUGINS["TypeScript Plugins<br/>background-agents / worktree<br/>notify / kdco-primitives"]
+        MCPS["MCP Servers<br/>context7 / composio / exa / gh_grep"]
+        TOOLS["External Tools<br/>npm / git / shell"]
+    end
+
+    INT1 --> DIR1
+    INT2 --> DIR1
+    INT2 --> DIR2
+    INT3 --> DIR3
+    INT3 --> DIR4
 
     DIR1 --> ORCH
     DIR2 --> ORCH
     DIR3 --> ORCH
     DIR4 --> ORCH
-    ORCH --> EXEC1
-    ORCH --> EXEC2
-    ORCH --> EXEC3
-    ORCH --> EXEC4
-    ORCH --> EXEC5
 
-    style DIR1 fill:#1a1a2e,stroke:#e94560,color:#fff
-    style DIR2 fill:#1a1a2e,stroke:#e94560,color:#fff
-    style DIR3 fill:#1a1a2e,stroke:#e94560,color:#fff
-    style DIR4 fill:#1a1a2e,stroke:#e94560,color:#fff
-    style ORCH fill:#16213e,stroke:#0f3460,color:#fff
-    style AGENTS fill:#16213e,stroke:#0f3460,color:#fff
-    style MODELS fill:#16213e,stroke:#0f3460,color:#fff
-    style SKILLS fill:#16213e,stroke:#0f3460,color:#fff
-    style EXEC1 fill:#0f3460,stroke:#53d769,color:#fff
-    style EXEC2 fill:#0f3460,stroke:#53d769,color:#fff
-    style EXEC3 fill:#0f3460,stroke:#53d769,color:#fff
-    style EXEC4 fill:#0f3460,stroke:#53d769,color:#fff
-    style EXEC5 fill:#0f3460,stroke:#53d769,color:#fff
+    ORCH -->|"delegates"| AGENTS
+    ORCH -->|"routes"| MODELS
+    ORCH -->|"loads"| SKILLS
+
+    AGENTS --> PLUGINS
+    PLUGINS --> MCPS
+    MCPS --> TOOLS
+
+    style L1 fill:#1a1a2e,stroke:#e94560,color:#fff
+    style L2 fill:#1a1a2e,stroke:#0f3460,color:#fff
+    style L3 fill:#16213e,stroke:#4a90d9,color:#fff
+    style L4 fill:#0f3460,stroke:#53d769,color:#fff
+    style INT1 fill:#2d1b1b,stroke:#e94560,color:#fff
+    style INT2 fill:#2d1b1b,stroke:#e94560,color:#fff
+    style INT3 fill:#2d1b1b,stroke:#e94560,color:#fff
+    style DIR1 fill:#1a1a2e,stroke:#0f3460,color:#fff
+    style DIR2 fill:#1a1a2e,stroke:#0f3460,color:#fff
+    style DIR3 fill:#1a1a2e,stroke:#0f3460,color:#fff
+    style DIR4 fill:#1a1a2e,stroke:#0f3460,color:#fff
+    style ORCH fill:#16213e,stroke:#4a90d9,color:#fff
+    style AGENTS fill:#16213e,stroke:#4a90d9,color:#fff
+    style MODELS fill:#16213e,stroke:#4a90d9,color:#fff
+    style SKILLS fill:#16213e,stroke:#4a90d9,color:#fff
+    style PLUGINS fill:#0f3460,stroke:#53d769,color:#fff
+    style MCPS fill:#0f3460,stroke:#53d769,color:#fff
+    style TOOLS fill:#0f3460,stroke:#53d769,color:#fff
 ```
 
-**How it works:**
+### Layer-by-Layer Breakdown
 
-1. **Directives** define *what* to do — natural language SOPs in Markdown that set goals, inputs, and expected outputs.
-2. **Orchestration** (the AI layer) reads directives, selects the right agent, loads the required philosophy, and coordinates execution. It's the intelligent router.
-3. **Execution** is handled by deterministic TypeScript plugins and MCP tools — the reliable, testable foundation that doesn't hallucinate.
+#### Layer 1 → Intent (Human Layer)
 
-When something breaks, the system **self-anneals**: it reads the error, fixes the plugin, tests it, and updates the directive so the same mistake never happens twice.
+Where work begins. User requests, profile configurations, and workflow rules (`AGENTS.md`) define *what* needs to happen — no technical implementation details.
+
+```mermaid
+graph LR
+    U["User Request"] --> C["Custom Commands<br/>/review, /ship, /qa"]
+    U --> P["Profiles<br/>default / env-specific"]
+    U --> R["AGENTS.md<br/>Workflow rules"]
+
+    C -->|"opencode run"| OUT["Work Unit"]
+    P -->|"config merge"| OUT
+    R -->|"agent routing"| OUT
+
+    style U fill:#e94560,stroke:#ff6b6b,color:#fff
+    style C fill:#4a0000,stroke:#e94560,color:#fff
+    style P fill:#4a0000,stroke:#e94560,color:#fff
+    style R fill:#4a0000,stroke:#e94560,color:#fff
+    style OUT fill:#0f3460,stroke:#4a90d9,color:#fff
+```
+
+#### Layer 2 → Directive (Config Layer)
+
+Translates intent into machine-readable directives. Every file here is a *constraint* the orchestrator must follow.
+
+| Directive File | What It Controls |
+|----------------|------------------|
+| `opencode.jsonc` | Plugins, MCP servers, permission model (deny-by-default) |
+| `oh-my-opencode-slim.json` | Model routing (6 roles × 3 tiers), multiplexer layout |
+| Agent `.md` files | Per-agent capabilities, tool access, philosophy loading |
+| `tools/philosophy.md` | Non-negotiable code philosophy mandates for implementation |
+
+#### Layer 3 → Orchestration (AI Layer)
+
+The probabilistic core. The orchestrator reads directives, selects the right agent and model, loads skills, and delegates work.
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant O as Orchestrator
+    participant A as Specialist Agent
+    participant S as Skills
+    participant M as Model Router
+
+    U->>O: "Review this PR"
+    O->>O: Read opencode.jsonc + AGENTS.md
+    O->>M: Select model (deepseek-v4-flash-free:high)
+    M-->>O: Model assigned
+    O->>A: Delegate to reviewer agent
+    A->>S: Load code-review + code-philosophy
+    S-->>A: Philosophy rules loaded
+    A->>A: Execute review
+    A-->>O: Findings + confidence scores
+    O-->>U: Structured review output
+```
+
+#### Layer 4 → Execution (Runtime Layer)
+
+Deterministic. No LLM calls — just TypeScript plugins, MCP tool calls, and shell commands carrying out the orchestrated work.
+
+```mermaid
+graph TD
+    subgraph Plugins["TypeScript Plugins"]
+        BG["background-agents<br/>Async delegation"]
+        WT["worktree<br/>Git worktrees"]
+        NT["notify<br/>Desktop alerts"]
+        KD["kdco-primitives<br/>Mutex / Shell / Timeout"]
+    end
+
+    subgraph MCP["MCP Servers"]
+        C7["context7<br/>Library docs"]
+        CX["composio<br/>Integrations"]
+        EX["exa<br/>Web search"]
+        GH["gh_grep<br/>GitHub code search"]
+    end
+
+    subgraph Ext["External Tools"]
+        GIT["git"]
+        NPM["npm / node"]
+        SH["shell"]
+    end
+
+    BG --> WT
+    BG --> NT
+    KD --> BG
+
+    C7 -->|"API calls"| Ext
+    CX -->|"API calls"| Ext
+    EX -->|"web fetch"| Ext
+    GH -->|"code search"| Ext
+
+    style Plugins fill:#0f3460,stroke:#53d769,color:#fff
+    style MCP fill:#0f3460,stroke:#4a90d9,color:#fff
+    style Ext fill:#1a1a2e,stroke:#888,color:#fff
+    style BG fill:#0f3460,stroke:#53d769,color:#fff
+    style WT fill:#0f3460,stroke:#53d769,color:#fff
+    style NT fill:#0f3460,stroke:#53d769,color:#fff
+    style KD fill:#0f3460,stroke:#53d769,color:#fff
+    style C7 fill:#0f3460,stroke:#4a90d9,color:#fff
+    style CX fill:#0f3460,stroke:#4a90d9,color:#fff
+    style EX fill:#0f3460,stroke:#4a90d9,color:#fff
+    style GH fill:#0f3460,stroke:#4a90d9,color:#fff
+```
+
+### Request Flow (End-to-End)
+
+How a single user request traverses all 4 layers:
+
+```mermaid
+graph LR
+    subgraph L1["① Intent"]
+        REQ["User: 'Refactor auth module'"]
+    end
+
+    subgraph L2["② Directive"]
+        CFG["opencode.jsonc → plan agent<br/>philosophy.md → code-philosophy"]
+    end
+
+    subgraph L3["③ Orchestration"]
+        PLAN["plan agent → breaks into tasks<br/>coder agent → implements each task"]
+    end
+
+    subgraph L4["④ Execution"]
+        EXEC["git worktree → isolate<br/>npm test → verify<br/>notify → alert user"]
+    end
+
+    REQ --> CFG --> PLAN --> EXEC
+
+    style L1 fill:#e94560,stroke:#ff6b6b,color:#fff
+    style L2 fill:#0f3460,stroke:#4a90d9,color:#fff
+    style L3 fill:#16213e,stroke:#4a90d9,color:#fff
+    style L4 fill:#0f3460,stroke:#53d769,color:#fff
+    style REQ fill:#2d1b1b,stroke:#e94560,color:#fff
+    style CFG fill:#1a1a2e,stroke:#0f3460,color:#fff
+    style PLAN fill:#16213e,stroke:#4a90d9,color:#fff
+    style EXEC fill:#0f3460,stroke:#53d769,color:#fff
+```
+
+**Key principle:** LLMs (Layer 3) never directly execute business logic. They route and plan — Layer 4 carries out the actual work deterministically.
 
 ▸ Agent Roster
 
