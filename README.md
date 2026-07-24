@@ -1,6 +1,6 @@
 # my-agent-harness
 
-**Personal AI orchestration — 14 agents, 7+ plugins, 4 MCP servers, and a self-annealing philosophy.**
+**Personal AI orchestration — 19 agents, 7+ plugins, 4 MCP servers, and a self-annealing philosophy.**
 
 A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](https://opencode.ai) (v1.18.4). This is my development harness — a complete agent ecosystem for planning, coding, researching, reviewing, and shipping software with AI that follows real engineering discipline.
 
@@ -33,13 +33,13 @@ graph TD
     subgraph L2["Layer 2 — Directive (Config Layer)"]
         DIR1["opencode.jsonc<br/>Plugins, MCPs, permissions"]
         DIR2["oh-my-opencode-slim.json<br/>Model routing + presets"]
-        DIR3["Agent definitions<br/>14 agents, 6 categories"]
+        DIR3["Agent definitions<br/>19 agents, 6 categories"]
         DIR4["tools/philosophy.md<br/>Code philosophy mandates"]
     end
 
     subgraph L3["Layer 3 — Orchestration (AI Layer)"]
         ORCH["OpenCode Orchestrator<br/>Reads directives → routes work"]
-        AGENTS["14 Specialist Agents<br/>planning / dev / research /<br/>content / review / orchestration"]
+        AGENTS["19 Specialist Agents<br/>planning / dev / research /<br/>content / review / orchestration"]
         MODELS["Model Routing<br/>mimo-v2.5-free (orchestrator)<br/>deepseek-v4-flash-free (workers)"]
         SKILLS["Skill Registry<br/>gstack / mp-* / managed"]
     end
@@ -233,7 +233,7 @@ graph LR
 
 ## ▸ Agent Roster
 
-14 specialist agents organized into 6 functional categories:
+19 specialist agents organized into 6 functional categories:
 
 ### Planning
 
@@ -251,6 +251,9 @@ graph LR
 | Agent | Description |
 |-------|-------------|
 | **coder** | Technical implementation specialist for writing and modifying code. Follows code philosophy mandates before every implementation. |
+| **typescript-pro** | TypeScript specialist — type-safe code, generics, utility types, and TS ecosystem patterns. |
+| **refactoring-specialist** | Code refactoring expert — improves code structure, eliminates smells, and applies design patterns safely. |
+| **mcp-developer** | MCP protocol specialist — builds servers/clients, configures integrations, and debugs MCP connections. |
 | **devops-specialist** | CI/CD pipelines, Docker, Kubernetes, Terraform, infrastructure-as-code, deployment automation, and cloud architecture. |
 | **test-engineer** | Test strategy and authoring — unit, integration, and e2e tests (Jest, Vitest, pytest, Playwright, Cypress). TDD and coverage analysis. |
 
@@ -278,6 +281,8 @@ graph LR
 | Agent | Description |
 |-------|-------------|
 | **build** | Build orchestrator that coordinates implementation through delegation. Parses requests, dispatches to specialist agents, monitors progress, and reports results. |
+| **context-manager** | Context optimization expert — manages context windows, prioritizes information, and handles context overflow. |
+| **error-coordinator** | Error handling and recovery specialist — manages cascading failures, recovery strategies, and system resilience. |
 
 ## ▸ Plugins
 
@@ -418,13 +423,13 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 
 ```
 .config/opencode/
-├── agents/                    # 14 specialist agent definitions
+├── agents/                    # 19 specialist agent definitions
 │   ├── planning/              #   adr-manager, architecture-analyzer, contract-manager, plan, story-mapper, system-builder
-│   ├── development/           #   coder, devops-specialist, test-engineer
+│   ├── development/           #   coder, typescript-pro, refactoring-specialist, mcp-developer, devops-specialist, test-engineer
 │   ├── research/              #   explore, researcher
 │   ├── content/               #   scribe
 │   ├── review/                #   reviewer
-│   └── orchestration/         #   build
+│   └── orchestration/         #   build, context-manager, error-coordinator
 ├── plugins/                   # TypeScript plugins
 │   ├── background-agents.ts   #   Unified delegation system
 │   ├── worktree.ts            #   Git worktree management
