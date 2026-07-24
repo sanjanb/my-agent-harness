@@ -1,0 +1,76 @@
+{
+	"$schema": "https://opencode.ai/config.json",
+	"plugin": [
+		"@tarquinen/opencode-dcp@3.1.3",
+		"@franlol/opencode-md-table-formatter@0.0.6",
+		"oh-my-opencode-slim@latest",
+		"envsitter-guard",
+		"@spoons-and-mirrors/pocket-universe@latest",
+		"opencode-plugin-openspec",
+		"opencode-review",
+		"@dietrichgebert/ponytail"
+	],
+	"mcp": {
+		"context7": {
+			"type": "remote",
+			"url": "https://mcp.context7.com/mcp",
+			"enabled": true,
+			"headers": {
+				"CONTEXT7_API_KEY": "ctx7sk-ba94a08a-2177-4bd8-8ab6-85c1eba39293"
+			}
+		},
+		"composio": {
+			"type": "remote",
+			"url": "https://connect.composio.dev/mcp"
+		},
+		"exa": {
+			"type": "remote",
+			"url": "https://mcp.exa.ai/mcp",
+			"enabled": true
+		},
+		"gh_grep": {
+			"type": "remote",
+			"url": "https://mcp.grep.app",
+			"enabled": true
+		}
+	},
+	"permission": {
+		"context7_*": "deny",
+		"exa_*": "deny",
+		"gh_grep_*": "deny",
+		"kagi_*": "deny",
+		"webfetch": "deny",
+		"worktree_*": "deny"
+	},
+	"agent": {
+		"scribe": {
+			"permission": {
+				"bash": {
+					"*": "deny"
+				},
+				"edit": "allow",
+				"glob": "allow",
+				"read": "allow",
+				"write": "allow",
+				"plan_read": "deny",
+				"todoread": "deny"
+			}
+		},
+		"plan": {
+			"mode": "primary",
+			"permission": {
+				"edit": "deny",
+				"write": "deny",
+				"bash": {
+					"*": "deny"
+				},
+				"delegation_read": "allow",
+				"delegation_list": "allow",
+				"worktree_*": "allow"
+			}
+		}
+	},
+	"instructions": [
+		"./tools/philosophy.md"
+	]
+}

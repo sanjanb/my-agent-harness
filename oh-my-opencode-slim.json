@@ -1,0 +1,70 @@
+{
+  "$schema": "https://unpkg.com/oh-my-opencode-slim@latest/oh-my-opencode-slim.schema.json",
+  "preset": "free",
+  "presets": {
+    "free": {
+      "orchestrator": {
+        "model": "opencode/mimo-v2.5-free",
+        "variant": "high",
+        "skills": ["*"],
+        "mcps": ["*"]
+      },
+      "oracle": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "high",
+        "skills": ["simplify", "code-review"],
+        "mcps": []
+      },
+      "librarian": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "medium",
+        "skills": [],
+        "mcps": ["websearch", "context7", "gh_grep"]
+      },
+      "explorer": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "low",
+        "skills": [],
+        "mcps": []
+      },
+      "designer": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "medium",
+        "skills": [],
+        "mcps": []
+      },
+      "fixer": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "high",
+        "skills": [],
+        "mcps": []
+      }
+    }
+  },
+  "multiplexer": {
+    "type": "tmux",
+    "layout": "main-vertical",
+    "main_pane_size": 60
+  },
+  "disabled_agents": ["observer"],
+  "agents": {
+    "development-devops-specialist": {
+      "orchestratorPrompt": "Use for CI/CD pipelines, Docker, Kubernetes, Terraform, infrastructure-as-code, deployment automation, cloud architecture, monitoring, and observability tasks."
+    },
+    "development-test-engineer": {
+      "orchestratorPrompt": "Use for test authoring, TDD, unit/integration/e2e testing, mocking, coverage analysis, and test infrastructure."
+    },
+    "planning-adr-manager": {
+      "orchestratorPrompt": "Use for creating Architecture Decision Records (ADRs) to document important architectural decisions with context and consequences."
+    },
+    "planning-architecture-analyzer": {
+      "orchestratorPrompt": "Use for Domain-Driven Design analysis: bounded contexts, aggregates, domain events, context mapping, and strategic design."
+    },
+    "planning-contract-manager": {
+      "orchestratorPrompt": "Use for API contract definition: OpenAPI 3.0+ specs, contract-first design, consumer-driven contracts, and API governance."
+    },
+    "planning-story-mapper": {
+      "orchestratorPrompt": "Use for user story mapping: personas, user journeys, vertical slices, epics, and story decomposition."
+    }
+  }
+}
