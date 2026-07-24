@@ -1,12 +1,10 @@
-# 🤖 my-agent-harness
+# my-agent-harness
 
 **Personal AI orchestration — 14 agents, 7+ plugins, 4 MCP servers, and a self-annealing philosophy.**
 
 A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](https://opencode.ai) (v1.18.4). This is my development harness — a complete agent ecosystem for planning, coding, researching, reviewing, and shipping software with AI that follows real engineering discipline.
 
----
-
-## 📋 Table of Contents
+▸ Table of Contents
 
 - [Architecture](#-architecture)
 - [Agent Roster](#-agent-roster)
@@ -20,34 +18,32 @@ A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](htt
 - [Built With](#-built-with)
 - [License](#-license)
 
----
-
-## 🏗 Architecture
+▸ Architecture
 
 The harness operates on a **3-layer separation of concerns** that maximizes reliability by keeping probabilistic LLM decisions away from deterministic business logic.
 
 ```mermaid
 graph TD
     subgraph "Layer 1 — Directive"
-        DIR1["📋 AGENTS.md<br/>System instructions"]
-        DIR2["📋 tools/philosophy.md<br/>Code philosophy mandates"]
-        DIR3["📋 Agent definitions<br/>(14 agents)"]
-        DIR4["📋 commands/review.md<br/>Custom commands"]
+        DIR1["AGENTS.md<br/>System instructions"]
+        DIR2["tools/philosophy.md<br/>Code philosophy mandates"]
+        DIR3["Agent definitions<br/>(14 agents)"]
+        DIR4["commands/review.md<br/>Custom commands"]
     end
 
     subgraph "Layer 2 — Orchestration"
-        ORCH["🧠 OpenCode Orchestrator<br/>(model routing via oh-my-opencode-slim)"]
-        ORCH -->|"delegates to"| AGENTS["14 Specialist Agents<br/>(planning → dev → research → content → review)"]
-        ORCH -->|"routes via"| MODELS["mimo-v2.5-free · deepseek-v4-flash-free"]
+        ORCH["OpenCode Orchestrator<br/>(model routing via oh-my-opencode-slim)"]
+        ORCH -->|"delegates to"| AGENTS["14 Specialist Agents<br/>(planning / dev / research / content / review)"]
+        ORCH -->|"routes via"| MODELS["mimo-v2.5-free / deepseek-v4-flash-free"]
         ORCH -->|"loads"| SKILLS["Skills + Philosophies"]
     end
 
     subgraph "Layer 3 — Execution"
-        EXEC1["🔌 background-agents.ts<br/>Unified delegation system"]
-        EXEC2["🔌 worktree.ts<br/>Worktree management"]
-        EXEC3["🔌 notify.ts<br/>Notifications"]
-        EXEC4["🔌 kdco-primitives/<br/>Temporal · shell · mutex · cmux"]
-        EXEC5["🌐 MCP Servers<br/>context7 · composio · exa · gh_grep"]
+        EXEC1["background-agents.ts<br/>Unified delegation system"]
+        EXEC2["worktree.ts<br/>Worktree management"]
+        EXEC3["notify.ts<br/>Notifications"]
+        EXEC4["kdco-primitives/<br/>Temporal / shell / mutex / cmux"]
+        EXEC5["MCP Servers<br/>context7 / composio / exa / gh_grep"]
     end
 
     DIR1 --> ORCH
@@ -83,9 +79,7 @@ graph TD
 
 When something breaks, the system **self-anneals**: it reads the error, fixes the plugin, tests it, and updates the directive so the same mistake never happens twice.
 
----
-
-## 👥 Agent Roster
+▸ Agent Roster
 
 14 specialist agents organized into 6 functional categories:
 
@@ -133,9 +127,7 @@ When something breaks, the system **self-anneals**: it reads the error, fixes th
 |-------|-------------|
 | **build** | Build orchestrator that coordinates implementation through delegation. Parses requests, dispatches to specialist agents, monitors progress, and reports results. |
 
----
-
-## 🔌 Plugins
+▸ Plugins
 
 ### TypeScript Plugins
 
@@ -160,51 +152,45 @@ When something breaks, the system **self-anneals**: it reads the error, fixes th
 | `opencode-review` | — Review workflow automation |
 | `@dietrichgebert/ponytail` | — Ponytail mode (lazy dev philosophy) |
 
----
-
-## 🛠 Skills
+▸ Skills
 
 ### Managed Skills (oh-my-opencode-slim v2.2.8)
 
 | Skill | Status | Description |
 |-------|--------|-------------|
-| **simplify** | ✅ managed | Simplifies complex code patterns |
-| **codemap** | ✅ managed | Codebase mapping and visualization |
-| **clonedeps** | ✅ managed | Clone dependency management |
-| **deepwork** | ✅ managed | Deep focus / extended context workflows |
-| **verification-planning** | ✅ managed | Verification-driven development planning |
-| **reflect** | ✅ managed | Post-session reflection and learning |
-| **oh-my-opencode-slim** | ✅ managed | Self-managing skill registry |
-| **worktrees** | ✅ managed | Git worktree automation workflows |
+| **simplify** | ✓ managed | Simplifies complex code patterns |
+| **codemap** | ✓ managed | Codebase mapping and visualization |
+| **clonedeps** | ✓ managed | Clone dependency management |
+| **deepwork** | ✓ managed | Deep focus / extended context workflows |
+| **verification-planning** | ✓ managed | Verification-driven development planning |
+| **reflect** | ✓ managed | Post-session reflection and learning |
+| **oh-my-opencode-slim** | ✓ managed | Self-managing skill registry |
+| **worktrees** | ✓ managed | Git worktree automation workflows |
 
 ### gstack Skills
 
 A full suite of workflow skills prefixed with `gstack-` for structured development operations: `gstack-design-review`, `gstack-design-html`, `gstack-design-consultation`, `gstack-design-shotgun`, `gstack-browse`, `gstack-qa`, `gstack-ship`, `gstack-land-and-deploy`, `gstack-review`, `gstack-investigate`, `gstack-retro`, `gstack-office-hours`, `gstack-plan-ceo-review`, `gstack-plan-eng-review`, `gstack-plan-design-review`, `gstack-setup-browser-cookies`, `gstack-setup-deploy`, `gstack-setup-gbrain`, `gstack-upgrade`, and more.
 
-### mp-* Skills
+### mp-\* Skills
 
 Community-curated skills: `mp-implement`, `mp-research`, `mp-tdd`, `mp-code-review`, `mp-codebase-design`, `mp-diagnosing-bugs`, `mp-domain-modeling`, `mp-wayfinder`, `mp-handoff`, `mp-teach`, `mp-grill-me`, `mp-resolving-merge-conflicts`, `mp-edit-article`, `mp-obsidian-vault`, `mp-prototype`, `mp-scaffold-exercises`, `mp-triage`, `mp-to-spec`, `mp-to-tickets`, `mp-writing-great-skills`, and more.
 
----
-
-## 🧠 Model Routing
+▸ Model Routing
 
 The `oh-my-opencode-slim.json` preset configures 6 specialized model roles with tiered capability:
 
 | Role | Model | Variant | Capabilities |
 |------|-------|---------|--------------|
-| **Orchestrator** | `mimo-v2.5-free` | high | All skills · All MCPs — full executive agent |
+| **Orchestrator** | `mimo-v2.5-free` | high | All skills / All MCPs — full executive agent |
 | **Oracle** | `deepseek-v4-flash-free` | high | `simplify` + `code-review` — deep analytical work |
-| **Librarian** | `deepseek-v4-flash-free` | medium | Web search · context7 · gh_grep — information retrieval |
+| **Librarian** | `deepseek-v4-flash-free` | medium | Web search / context7 / gh_grep — information retrieval |
 | **Explorer** | `deepseek-v4-flash-free` | low | Lightweight exploration tasks |
 | **Designer** | `deepseek-v4-flash-free` | medium | UI/UX design and review workflows |
 | **Fixer** | `deepseek-v4-flash-free` | high | Targeted bug fixing and patching |
 
 The **tmux multiplexer** runs with a `main-vertical` layout at 60% main pane size, enabling parallel agent workflows side-by-side.
 
----
-
-## 🌐 MCP Servers
+▸ MCP Servers
 
 | Server | URL | Purpose |
 |--------|-----|---------|
@@ -213,9 +199,7 @@ The **tmux multiplexer** runs with a `main-vertical` layout at 60% main pane siz
 | **exa** | `mcp.exa.ai` | Web search and content discovery |
 | **gh_grep** | `mcp.grep.app` | GitHub code search and pattern matching |
 
----
-
-## 🚀 Quick Start
+▸ Quick Start
 
 ### Prerequisites
 
@@ -254,9 +238,7 @@ opencode run review
 opencode skill list
 ```
 
----
-
-## ⚙️ Configuration
+▸ Configuration
 
 ### Core Files
 
@@ -280,9 +262,7 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 - **plan agent** (mode: `primary`): Edit/write/bash denied, delegation read/list allowed, worktree management allowed — purpose-built as a read-only orchestrator
 - **scribe agent**: Bash denied, edit/write/read/glob allowed — content creation without shell access
 
----
-
-## 📁 Project Structure
+▸ Project Structure
 
 ```
 .config/opencode/
@@ -320,9 +300,7 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 └── package.json               # Plugin dependencies
 ```
 
----
-
-## 📖 Philosophy
+▸ Philosophy
 
 This harness is governed by two code philosophy mandates that every agent must load before implementation:
 
@@ -331,27 +309,23 @@ This harness is governed by two code philosophy mandates that every agent must l
 
 These are non-negotiable. The `tools/philosophy.md` directive enforces that agents select, load, and verify against the relevant philosophy before writing a single line of code.
 
----
+▸ Built With
 
-## 🧩 Built With
+- [OpenCode](https://opencode.ai) — AI-native development platform
+- [`@opencode-ai/plugin`](https://www.npmjs.com/package/@opencode-ai/plugin) v1.18.4 — Plugin SDK
+- [oh-my-opencode-slim](https://github.com/code-yeongyu/oh-my-opencode-slim) — Skill registry and model routing
+- [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode) — Background agent delegation system (MIT)
+- [Context7](https://context7.com) — Documentation MCP server
+- [Exa](https://exa.ai) — Web search MCP server
+- [grep.app](https://grep.app) — GitHub code search MCP server
+- [Composio](https://composio.dev) — Integration platform
+- [KDCO Registry](https://registry.kdco.dev) — Skill package registry
+- [Ponytail](https://github.com/dietrichgebert/ponytail) — Lazy development philosophy plugin
+- [unique-names-generator](https://github.com/andreasonny83/unique-names-generator) — Agent naming
+- [zod](https://zod.dev) — Schema validation
+- [node-notifier](https://github.com/mikaelbr/node-notifier) — Desktop notifications
 
-- **[OpenCode](https://opencode.ai)** — AI-native development platform
-- **[`@opencode-ai/plugin`](https://www.npmjs.com/package/@opencode-ai/plugin)** v1.18.4 — Plugin SDK
-- **[oh-my-opencode-slim](https://github.com/code-yeongyu/oh-my-opencode-slim)** — Skill registry and model routing
-- **[oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode)** — Background agent delegation system (MIT)
-- **[Context7](https://context7.com)** — Documentation MCP server
-- **[Exa](https://exa.ai)** — Web search MCP server
-- **[grep.app](https://grep.app)** — GitHub code search MCP server
-- **[Composio](https://composio.dev)** — Integration platform
-- **[KDCO Registry](https://registry.kdco.dev)** — Skill package registry
-- **[Ponytail](https://github.com/dietrichgebert/ponytail)** — Lazy development philosophy plugin
-- **[unique-names-generator](https://github.com/andreasonny83/unique-names-generator)** — Agent naming
-- **[zod](https://zod.dev)** — Schema validation
-- **[node-notifier](https://github.com/mikaelbr/node-notifier)** — Desktop notifications
-
----
-
-## 📄 License
+▸ License
 
 MIT © 2026
 
@@ -361,8 +335,6 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
----
-
 <p align="center">
-  <sub>Built with 🧠 by an agent harness that reviews its own code.</sub>
+  <sub>Built by an agent harness that reviews its own code.</sub>
 </p>
