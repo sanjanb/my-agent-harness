@@ -43,6 +43,21 @@ Before ANY implementation, load the relevant philosophy skill:
 | Module augmentation | Extending third-party types |
 | Declaration merging | Extending interfaces from libs |
 
+## TSConfig Patterns
+- Strict mode with all strict flags enabled
+- Path aliases for clean imports
+- Declaration file generation
+- Module resolution strategy (bundler/node16/nodenext)
+- Incremental compilation for large projects
+- Project references for monorepos
+
+## Module Resolution
+- ESM vs CJS decision framework
+- Package.json exports field
+- Directory index files vs explicit paths
+- Barrel exports and tree-shaking
+- Ambient declarations for untyped packages
+
 ## Process
 
 1. **Read** — Understand existing code and type patterns

@@ -40,6 +40,23 @@ For each project, decide which of these are actually needed (YAGNI — skip what
 - `opencode.json` — Project-level opencode config if needed
 - `AGENTS.md` — Routing rules for the orchestrator
 
+## Agent Configuration Patterns
+| Project Type | Recommended Agents |
+|-------------|-------------------|
+| Small CLI tool | coder, test-engineer |
+| Web app (React/Next.js) | coder, test-engineer, scribe |
+| API service | coder, test-engineer, devops-specialist |
+| Library/SDK | coder, test-engineer, scribe, reviewer |
+| Monorepo | All development + planning agents |
+| Infrastructure project | devops-specialist, coder, test-engineer |
+
+## Context Files to Generate
+- `context/navigation.md` — Index of all context files
+- `context/standards/code-style.md` — Language-specific style rules
+- `context/standards/naming.md` — Naming conventions
+- `context/workflows/pr.md` — PR workflow for this project
+- `context/workflows/release.md` — Release/deploy process
+
 ## Design Principles
 
 - **Minimal** — Don't generate agents the project won't use. A small project needs 3 agents, not 15.

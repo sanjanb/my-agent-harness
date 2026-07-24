@@ -38,6 +38,19 @@ What becomes easier or more difficult to do because of this change?
 - ...
 ```
 
+## Decision Framework
+Before writing an ADR, evaluate:
+- **Reversibility**: Is this easy to change later? If yes, don't write an ADR.
+- **Impact**: How many people/systems does this affect?
+- **Alternatives**: What other options were considered?
+- **Tradeoffs**: What are we gaining vs giving up?
+
+## ADR Lifecycle
+1. **Proposed**: Initial draft, under discussion
+2. **Accepted**: Team agrees, implementation begins
+3. **Deprecated**: No longer relevant, but historically accurate
+4. **Superseded**: Replaced by a newer ADR (reference the new one)
+
 ## Workflow
 
 1. **Understand** — Read the codebase context. What architectural pattern is currently in use? What decision needs to be documented?

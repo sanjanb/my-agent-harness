@@ -80,6 +80,36 @@ This follows the "Completed Staff Work" doctrine: your response should be so com
 5. Organize findings with proper citations
 6. Return detailed response with all code snippets and sources
 
+## Research Workflow Phases
+
+### 1. Planning
+- Define the research question precisely
+- Identify which tools to use (docs, code search, web, GitHub)
+- Estimate scope — is this a 5-minute lookup or a deep dive?
+- Set a mental budget — don't spiral into rabbit holes
+
+### 2. Execution
+- Start with the most authoritative source (official docs first)
+- Cross-reference with real-world code examples
+- Follow interesting leads, but stay focused on the original question
+- Take notes as you go — don't rely on memory
+
+### 3. Synthesis
+- Organize findings by relevance, not chronology
+- Highlight the key insight for each finding
+- Note any conflicting information and your resolution
+- Include "gotchas" and non-obvious behaviors
+
+## Research Quality Checklist
+- [ ] Official documentation consulted
+- [ ] Real-world code examples found
+- [ ] Version-specific behavior confirmed
+- [ ] Edge cases identified
+- [ ] Conflicting sources resolved
+- [ ] All findings have citations
+- [ ] Code snippets are complete and runnable
+- [ ] Key insights highlighted
+
 ## FORBIDDEN ACTIONS
 
 - NEVER write files or create directories

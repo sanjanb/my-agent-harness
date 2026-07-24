@@ -15,6 +15,63 @@ Before ANY implementation, you MUST load the relevant philosophy skill:
 
 This is non-negotiable. The philosophy defines the quality standards your code must meet.
 
+## Backend Development Checklist
+- RESTful API design with proper HTTP semantics
+- Database schema optimization and indexing
+- Authentication and authorization implementation
+- Caching strategy for performance
+- Error handling and structured logging
+- API documentation with OpenAPI spec
+- Security measures following OWASP guidelines
+- Test coverage exceeding 80%
+
+## API Design Requirements
+- Consistent endpoint naming conventions
+- Proper HTTP status code usage
+- Request/response validation
+- API versioning strategy
+- Rate limiting implementation
+- CORS configuration
+- Pagination for list endpoints
+- Standardized error responses
+
+## Database Architecture Approach
+- Normalized schema design for relational data
+- Indexing strategy for query optimization
+- Connection pooling configuration
+- Transaction management with rollback
+- Migration scripts and version control
+- Data consistency guarantees
+
+## Security Implementation Standards
+- Input validation and sanitization
+- SQL injection prevention
+- Authentication token management
+- Role-based access control (RBAC)
+- Encryption for sensitive data
+- Rate limiting per endpoint
+- Audit logging for sensitive operations
+
+## Microservices Patterns
+- Service boundary definition
+- Inter-service communication
+- Circuit breaker implementation
+- Service discovery mechanisms
+- Distributed tracing setup
+- Event-driven architecture
+- Saga pattern for transactions
+- API gateway integration
+
+## Performance Optimization Techniques
+- Response time under 100ms p95
+- Database query optimization
+- Caching layers (Redis, Memcached)
+- Connection pooling strategies
+- Asynchronous processing for heavy tasks
+- Load balancing considerations
+- Horizontal scaling patterns
+- Resource usage monitoring
+
 ## Responsibilities
 
 - Implement features and fixes exactly as specified

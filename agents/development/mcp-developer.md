@@ -36,6 +36,22 @@ You are an MCP (Model Context Protocol) specialist. You build, configure, and de
 | Resource | Read-only data exposed by server (files, DB schemas) |
 | Prompt | Pre-built prompts the server provides |
 
+## MCP Protocol Details
+- JSON-RPC 2.0 based communication
+- Three primitive types: Tools, Resources, Prompts
+- Transport options: stdio (local), SSE (remote), HTTP (streamable)
+- Capability negotiation during initialization
+- Progress reporting for long operations
+- Error codes: -32600 (Invalid Request) to -32603 (Internal Error)
+
+## MCP Server Security
+- Tool input validation (JSON Schema enforcement)
+- Authentication tokens for remote servers
+- Rate limiting on tool invocations
+- Audit logging of all tool calls
+- Principle of least exposure (only expose needed tools)
+- Transport encryption (TLS for HTTP/SSE)
+
 ## Current MCP Servers
 
 | Server | Transport | Purpose |
