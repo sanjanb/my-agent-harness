@@ -4,7 +4,7 @@
 
 A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](https://opencode.ai) (v1.18.4). This is my development harness — a complete agent ecosystem for planning, coding, researching, reviewing, and shipping software with AI that follows real engineering discipline.
 
-▸ Table of Contents
+## ▸ Table of Contents
 
 - [Architecture](#architecture)
 - [Agent Roster](#agent-roster)
@@ -18,7 +18,7 @@ A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](htt
 - [Built With](#built-with)
 - [License](#license)
 
-▸ Architecture
+## ▸ Architecture
 
 The harness operates on a **4-layer architecture** that separates concerns from human intent through to deterministic execution, keeping probabilistic LLM decisions safely away from business logic.
 
@@ -231,7 +231,7 @@ graph LR
 
 **Key principle:** LLMs (Layer 3) never directly execute business logic. They route and plan — Layer 4 carries out the actual work deterministically.
 
-▸ Agent Roster
+## ▸ Agent Roster
 
 14 specialist agents organized into 6 functional categories:
 
@@ -279,7 +279,7 @@ graph LR
 |-------|-------------|
 | **build** | Build orchestrator that coordinates implementation through delegation. Parses requests, dispatches to specialist agents, monitors progress, and reports results. |
 
-▸ Plugins
+## ▸ Plugins
 
 ### TypeScript Plugins
 
@@ -304,7 +304,7 @@ graph LR
 | `opencode-review` | — Review workflow automation |
 | `@dietrichgebert/ponytail` | — Ponytail mode (lazy dev philosophy) |
 
-▸ Skills
+## ▸ Skills
 
 ### Managed Skills (oh-my-opencode-slim v2.2.8)
 
@@ -327,7 +327,7 @@ A full suite of workflow skills prefixed with `gstack-` for structured developme
 
 Community-curated skills: `mp-implement`, `mp-research`, `mp-tdd`, `mp-code-review`, `mp-codebase-design`, `mp-diagnosing-bugs`, `mp-domain-modeling`, `mp-wayfinder`, `mp-handoff`, `mp-teach`, `mp-grill-me`, `mp-resolving-merge-conflicts`, `mp-edit-article`, `mp-obsidian-vault`, `mp-prototype`, `mp-scaffold-exercises`, `mp-triage`, `mp-to-spec`, `mp-to-tickets`, `mp-writing-great-skills`, and more.
 
-▸ Model Routing
+## ▸ Model Routing
 
 The `oh-my-opencode-slim.json` preset configures 6 specialized model roles with tiered capability:
 
@@ -342,7 +342,7 @@ The `oh-my-opencode-slim.json` preset configures 6 specialized model roles with 
 
 The **tmux multiplexer** runs with a `main-vertical` layout at 60% main pane size, enabling parallel agent workflows side-by-side.
 
-▸ MCP Servers
+## ▸ MCP Servers
 
 | Server | URL | Purpose |
 |--------|-----|---------|
@@ -351,7 +351,7 @@ The **tmux multiplexer** runs with a `main-vertical` layout at 60% main pane siz
 | **exa** | `mcp.exa.ai` | Web search and content discovery |
 | **gh_grep** | `mcp.grep.app` | GitHub code search and pattern matching |
 
-▸ Quick Start
+## ▸ Quick Start
 
 ### Prerequisites
 
@@ -390,7 +390,7 @@ opencode run review
 opencode skill list
 ```
 
-▸ Configuration
+## ▸ Configuration
 
 ### Core Files
 
@@ -414,7 +414,7 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 - **plan agent** (mode: `primary`): Edit/write/bash denied, delegation read/list allowed, worktree management allowed — purpose-built as a read-only orchestrator
 - **scribe agent**: Bash denied, edit/write/read/glob allowed — content creation without shell access
 
-▸ Project Structure
+## ▸ Project Structure
 
 ```
 .config/opencode/
@@ -452,7 +452,7 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 └── package.json               # Plugin dependencies
 ```
 
-▸ Philosophy
+## ▸ Philosophy
 
 This harness is governed by two code philosophy mandates that every agent must load before implementation:
 
@@ -461,7 +461,7 @@ This harness is governed by two code philosophy mandates that every agent must l
 
 These are non-negotiable. The `tools/philosophy.md` directive enforces that agents select, load, and verify against the relevant philosophy before writing a single line of code.
 
-▸ Built With
+## ▸ Built With
 
 - [OpenCode](https://opencode.ai) — AI-native development platform
 - [`@opencode-ai/plugin`](https://www.npmjs.com/package/@opencode-ai/plugin) v1.18.4 — Plugin SDK
@@ -477,7 +477,7 @@ These are non-negotiable. The `tools/philosophy.md` directive enforces that agen
 - [zod](https://zod.dev) — Schema validation
 - [node-notifier](https://github.com/mikaelbr/node-notifier) — Desktop notifications
 
-▸ License
+## ▸ License
 
 MIT © 2026
 
