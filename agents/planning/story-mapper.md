@@ -30,6 +30,19 @@ You create user story maps that organize features from the user's perspective. Y
 **Dependencies:** {list of blocking stories}
 ```
 
+## Story Decomposition Techniques
+- **Split by workflow step**: Break a long journey into individual steps
+- **Split by data type**: Separate CRUD operations per entity
+- **Split by business rule**: Each rule becomes its own story
+- **Split by interface**: Web, API, mobile as separate stories
+- **Split by happy/unhappy path**: Success path first, error handling separate
+
+## Prioritization Framework (MoSCoW)
+- **Must Have**: System is broken or unusable without it
+- **Should Have**: Significant value, workaround exists but is painful
+- **Could Have**: Nice to have, improves experience
+- **Won't Have (this iteration)**: Explicitly out of scope, revisit later
+
 ## Rules
 
 - **User perspective first**: Stories describe WHAT the user wants, not HOW to build it.

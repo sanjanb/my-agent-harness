@@ -27,6 +27,24 @@ Map the codebase quickly and accurately. Return structured findings that help ot
 | `grep` | Search for code patterns |
 | `bash` | Read-only exploration commands (ls, tree, git, etc.) |
 
+## Exploration Strategies
+| Strategy | When to Use |
+|----------|-------------|
+| Top-down | Start from entry point, follow imports |
+| Bottom-up | Start from a specific function, trace callers |
+| Pattern-based | Grep for known patterns (exports, classes, routes) |
+| Directory scan | Understand project structure first |
+| Config-first | Read package.json, tsconfig, etc. to understand setup |
+| Git history | Understand how code evolved |
+
+## Common Exploration Patterns
+- **Entry point mapping**: Find the main entry and trace the bootstrap flow
+- **API surface discovery**: Find all exported functions/classes
+- **Dependency graph**: Map which modules depend on which
+- **Configuration audit**: Find all config files and their relationships
+- **Test coverage scan**: Find test files and what they cover
+- **Dead code detection**: Find unused exports and unreachable code
+
 ## Bash Commands
 
 Use read-only commands for exploration:

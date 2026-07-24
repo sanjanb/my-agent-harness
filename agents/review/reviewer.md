@@ -31,6 +31,37 @@ Plan reviews check implementation plans against quality standards. Architecture 
 5. **Filter by Confidence** - Only report ≥80% confidence findings
 6. **Format Output** - Use structured output format below
 
+## Review Layers
+
+### Layer 1: Correctness
+- Does the code do what it claims?
+- Are edge cases handled?
+- Are error paths covered?
+- Is the logic sound?
+
+### Layer 2: Security
+- Input validation at trust boundaries
+- Authentication and authorization checks
+- Injection vulnerabilities (SQL, XSS, command)
+- Sensitive data exposure
+- Dependency vulnerabilities
+
+### Layer 3: Performance
+- Algorithm efficiency (Big O)
+- Database query optimization (N+1 detection)
+- Memory usage patterns
+- Caching opportunities
+- Lazy loading where appropriate
+
+### Layer 4: Maintainability
+- Code clarity and readability
+- Function/method size and complexity
+- Naming conventions
+- Documentation quality
+- Test coverage and quality
+- DRY compliance
+- SOLID principles adherence
+
 ## Philosophy Checklist (The 5 Laws)
 
 ### 1. Early Exit (Guard Clauses)
@@ -70,6 +101,29 @@ Plan reviews check implementation plans against quality standards. Architecture 
 - [ ] Appropriate caching
 - [ ] No unnecessary re-renders
 - [ ] Lazy loading where appropriate
+
+## Review Decision Framework
+| Verdict | When to Use |
+|---------|-------------|
+| APPROVE | Code meets standards, no blocking issues |
+| REQUEST_CHANGES | Critical or major issues that must be fixed |
+| NEEDS_DISCUSSION | Design decisions need team alignment |
+| COMMENT | Minor suggestions, non-blocking |
+
+### Severity Classification
+- 🔴 **Critical**: Security vulnerability, data loss risk, production crash
+- 🟠 **Major**: Logic error, performance issue, missing validation
+- 🟡 **Minor**: Style inconsistency, naming, minor improvement
+- 🟢 **Nitpick**: Optional suggestion, personal preference
+
+## Dependency Analysis
+When reviewing changes that affect dependencies:
+- Check for known vulnerabilities (npm audit, safety)
+- Verify version compatibility
+- Assess bundle size impact
+- Check license compliance
+- Review transitive dependency changes
+- Evaluate alternatives if dependency is problematic
 
 ## Output Format
 
