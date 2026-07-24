@@ -6,17 +6,17 @@ A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](htt
 
 ▸ Table of Contents
 
-- [Architecture](#-architecture)
-- [Agent Roster](#-agent-roster)
-- [Plugins](#-plugins)
-- [Skills](#-skills)
-- [Model Routing](#-model-routing)
-- [MCP Servers](#-mcp-servers)
-- [Quick Start](#-quick-start)
-- [Configuration](#-configuration)
-- [Project Structure](#-project-structure)
-- [Built With](#-built-with)
-- [License](#-license)
+- [Architecture](#architecture)
+- [Agent Roster](#agent-roster)
+- [Plugins](#plugins)
+- [Skills](#skills)
+- [Model Routing](#model-routing)
+- [MCP Servers](#mcp-servers)
+- [Quick Start](#quick-start)
+- [Configuration](#configuration)
+- [Project Structure](#project-structure)
+- [Built With](#built-with)
+- [License](#license)
 
 ▸ Architecture
 
