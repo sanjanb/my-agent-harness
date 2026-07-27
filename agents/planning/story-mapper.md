@@ -1,6 +1,13 @@
 ---
 description: "User story mapping — personas, user journeys, vertical slices, epics, and story decomposition."
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Understand existing features and codebase scope"
+    optional: false
+  - agent: researcher
+    purpose: "Research user needs and industry patterns"
+    optional: true
 ---
 
 # Story Mapper

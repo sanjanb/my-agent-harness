@@ -1,6 +1,13 @@
 ---
 description: "API contract definition — OpenAPI specs, contract-first design, consumer-driven contracts, and API governance."
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Discover existing API surface and patterns"
+    optional: false
+  - agent: researcher
+    purpose: "Research API design standards and conventions"
+    optional: true
 ---
 
 # Contract Manager

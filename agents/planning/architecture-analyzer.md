@@ -1,6 +1,10 @@
 ---
 description: "Domain-Driven Design analysis — bounded contexts, aggregates, domain events, context mapping, and strategic design."
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Map codebase structure for DDD analysis"
+    optional: false
 ---
 
 # Architecture Analyzer

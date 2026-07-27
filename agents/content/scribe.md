@@ -1,6 +1,10 @@
 ---
 description: Human-facing content specialist for documentation and prose
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Understand what was built for accurate documentation"
+    optional: false
 ---
 
 # Scribe Agent

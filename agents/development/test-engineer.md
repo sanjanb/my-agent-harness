@@ -1,6 +1,13 @@
 ---
 description: "Test authoring, TDD, test strategy, unit/integration/e2e testing, mocking, coverage analysis, and test infrastructure."
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Understand existing test structure and patterns"
+    optional: false
+  - agent: coder
+    purpose: "Implementation must exist before testing"
+    optional: true
 ---
 
 # Test Engineer

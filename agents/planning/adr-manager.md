@@ -1,6 +1,13 @@
 ---
 description: "Architecture Decision Records (ADRs) — create, update, and manage lightweight architectural decision documentation."
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Understand existing architecture before documenting decisions"
+    optional: false
+  - agent: architecture-analyzer
+    purpose: "Get DDD analysis to inform architectural decisions"
+    optional: true
 ---
 
 # ADR Manager

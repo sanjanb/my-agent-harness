@@ -1,6 +1,10 @@
 ---
 description: Expert code reviewer for security, performance, and philosophy compliance
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Understand codebase context and related code paths"
+    optional: false
 ---
 
 # Code Review Agent

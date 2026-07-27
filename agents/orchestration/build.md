@@ -1,6 +1,10 @@
 ---
 description: Build orchestrator that coordinates implementation through delegation
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Map codebase before orchestrating implementation"
+    optional: false
 ---
 
 # Build Agent
@@ -22,10 +26,11 @@ You CANNOT edit files or run commands directly. For ALL implementation and verif
 ## Process
 
 1. **Parse** — Understand the build/implementation request
-2. **Dispatch** — Delegate tasks to appropriate agents via `delegate`
-3. **Monitor** — Use `delegation_read` and `delegation_list` to track progress
-4. **Verify** — Confirm all delegations completed successfully
-5. **Report** — Summarize what was built and verification results
+2. **Resolve Dependencies** — Run `node skills/agent-deps/resolve.mjs <agent>` for each agent you plan to delegate to. Execute required dependencies first.
+3. **Dispatch** — Delegate tasks to appropriate agents via `delegate`
+4. **Monitor** — Use `delegation_read` and `delegation_list` to track progress
+5. **Verify** — Confirm all delegations completed successfully
+6. **Report** — Summarize what was built and verification results
 
 ## Orchestration Patterns
 - **Sequential**: Task B depends on Task A's output

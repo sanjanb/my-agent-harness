@@ -1,6 +1,13 @@
 ---
 description: Code refactoring expert — improves code structure, eliminates smells, and applies design patterns safely
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Map code structure before refactoring"
+    optional: false
+  - agent: reviewer
+    purpose: "Get review findings to guide refactoring focus"
+    optional: true
 ---
 
 # Refactoring Specialist Agent

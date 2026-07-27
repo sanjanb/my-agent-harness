@@ -1,6 +1,13 @@
 ---
 description: Technical implementation specialist for writing and modifying code
 mode: subagent
+dependencies:
+  - agent: explore
+    purpose: "Map relevant code paths before implementing"
+    optional: false
+  - agent: researcher
+    purpose: "Research library APIs and patterns"
+    optional: true
 ---
 
 # Coder Agent
