@@ -1,0 +1,40 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "stages": ["test", "build", "review", "deploy", "notify"],
+  "test": {
+    "agent": "test-engineer",
+    "command": "test",
+    "args": ["--coverage"],
+    "failOnFailure": true,
+    "timeout": 300000
+  },
+  "build": {
+    "agent": "devops-specialist",
+    "commands": ["typecheck", "lint", "build"],
+    "docker": false,
+    "failOnFailure": true,
+    "timeout": 300000
+  },
+  "review": {
+    "agent": "reviewer",
+    "mode": "full",
+    "failOn": ["security", "correctness"],
+    "timeout": 180000
+  },
+  "deploy": {
+    "agent": "devops-specialist",
+    "target": "preview",
+    "platform": "vercel",
+    "environments": {
+      "preview": { "url": "auto", "alias": true },
+      "production": { "url": "manual", "alias": false }
+    },
+    "failOnFailure": true,
+    "timeout": 300000
+  },
+  "notify": {
+    "on": ["success", "failure"],
+    "channels": ["desktop", "terminal"],
+    "message": "{status}: {branch} → {target} ({duration}s)"
+  }
+}

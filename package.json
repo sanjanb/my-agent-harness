@@ -1,0 +1,63 @@
+{
+  "name": "my-agent-harness",
+  "version": "1.0.0",
+  "description": "AI Orchestration Harness for OpenCode - 4-layer architecture with 19 custom agents, 4 plugins, and gstack skills",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "my-agent-harness": "dist/cli.js",
+    "mah": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "setup": "node dist/cli.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "opencode",
+    "ai",
+    "agents",
+    "orchestration",
+    "harness"
+  ],
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "1.18.7",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "execa": "^9.0.0",
+    "fs-extra": "^11.2.0",
+    "ora": "^8.0.1",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.12.0",
+    "@types/prompts": "^2.4.9",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "config",
+    "agents",
+    "plugins",
+    "tools",
+    "commands",
+    "profiles",
+    "README.md",
+    "AGENTS.md",
+    "opencode.jsonc",
+    "oh-my-opencode-slim.json",
+    "ocx.jsonc",
+    "dcp.jsonc",
+    "ship.jsonc"
+  ]
+}
