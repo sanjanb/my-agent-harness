@@ -362,101 +362,44 @@ The **tmux multiplexer** runs with a `main-vertical` layout at 60% main pane siz
 
 - [OpenCode](https://opencode.ai) CLI installed
 - Node.js 18+
-- (Optional) tmux for multiplexer support
+- npm
+- git
 
-### Installation (Recommended)
-
-Use the automated setup script:
-
-```bash
-# macOS / Linux
-curl -fsSL https://raw.githubusercontent.com/your-username/my-agent-harness/main/scripts/setup.sh | bash
-
-# Windows (PowerShell)
-irm https://raw.githubusercontent.com/your-username/my-agent-harness/main/scripts/setup.ps1 | iex
-```
-
-### Installation via npx (Easiest)
+### Installation via npx (Recommended)
 
 ```bash
-# One-liner install - no git clone needed
 npx my-agent-harness@latest
-
-# Or with specific options
-npx my-agent-harness@latest --force --skip-verify
 ```
 
-The npx command will:
-1. Download and run the latest version
-2. Check prerequisites (OpenCode, Node.js, npm, git)
-3. Clone the repository to `~/my-agent-harness`
-4. Install plugin dependencies
-5. Copy configuration templates
-6. Link the config directory to `~/.config/opencode`
-7. Prompt for required API keys
-8. Verify the installation
+That's it. The installer will:
 
-Or manually:
-
-```bash
-# Clone the harness
-git clone https://github.com/your-username/my-agent-harness.git
-cd my-agent-harness
-
-# Run setup script
-./scripts/setup.sh        # macOS / Linux
-.\scripts\setup.ps1       # Windows PowerShell
-```
-
-The setup script will:
-1. Check prerequisites (OpenCode, Node.js, npm, git)
-2. Clone/update the repository
-3. Install plugin dependencies (`npm install`)
+1. Verify prerequisites (OpenCode, Node.js, npm, git)
+2. Clone the repository to `~/my-agent-harness`
+3. Install plugin dependencies
 4. Copy configuration templates
-5. Link the config directory to `~/.config/opencode`
-6. Verify the installation
+5. Symlink `~/.config/opencode` → the repository
+6. Prompt for API keys (Context7, OpenAI, Anthropic)
+7. Verify agents and skills loaded
 
-### Configuration
+**Options:**
 
-After installation, **edit the config files** in the repository root:
+| Flag | Effect |
+|------|--------|
+| `--force` | Overwrite existing `~/.config/opencode` (backs up first) |
+| `--skip-deps` | Skip `npm install` (if deps already installed) |
+| `--skip-verify` | Skip post-install verification |
+| `-r, --repo-dir <path>` | Custom clone location (default: `~/my-agent-harness`) |
+| `-i, --install-dir <path>` | Custom install target (default: `~/.config/opencode`) |
 
-| File | Required | Purpose |
-|------|----------|---------|
-| `opencode.jsonc` | Yes | Add your API keys (Context7, Exa, etc.) |
-| `oh-my-opencode-slim.json` | Optional | Adjust model routing if needed |
-| `ocx.jsonc` | Optional | Change skill registry if desired |
-| `dcp.jsonc` | Optional | Adjust context pruning rules |
+**Short alias:** `mah` works as a shorthand for `my-agent-harness`.
 
-**Required API keys** (add to `opencode.jsonc` or use environment variables):
-- `CONTEXT7_API_KEY` — Get at [context7.com](https://context7.com)
-- `EXA_API_KEY` — Get at [exa.ai](https://exa.ai) (optional)
-- `COMPOSIO_API_KEY` — Get at [composio.dev](https://composio.dev) (optional)
-- `GITHUB_TOKEN` — Create at [github.com/settings/tokens](https://github.com/settings/tokens) (optional)
-
-### Verify It Works
+### Manual Installation
 
 ```bash
-# List available agents
-opencode agent list
-
-# Run a review command
-opencode run review
-
-# Check skill registry
-opencode skill list
-```
-
-### Manual Installation (Alternative)
-
-If you prefer manual setup:
-
-```bash
-# Clone the harness
-git clone https://github.com/your-username/my-agent-harness.git
+git clone https://github.com/sanjanb/my-agent-harness.git
 cd my-agent-harness
-
-# Install plugin dependencies
 npm install
+npm link    # makes 'my-agent-harness' and 'mah' available globally
 
 # Copy config templates
 cp config/opencode.jsonc.template opencode.jsonc
@@ -464,15 +407,35 @@ cp config/oh-my-opencode-slim.json.template oh-my-opencode-slim.json
 cp config/ocx.jsonc.template ocx.jsonc
 cp config/dcp.jsonc.template dcp.jsonc
 
-# Edit configs with your API keys
-# (Required: CONTEXT7_API_KEY in opencode.jsonc)
-
-# Link to OpenCode config
-# On macOS/Linux:
+# Symlink to OpenCode config directory
+# macOS/Linux:
 ln -s "$(pwd)" ~/.config/opencode
-
-# On Windows (PowerShell):
+# Windows (PowerShell as admin):
 # New-Item -ItemType Junction -Path "$env:USERPROFILE\.config\opencode" -Target "$(pwd)"
+```
+
+### Configuration
+
+After installation, edit the config files in the repository root:
+
+| File | Required | Purpose |
+|------|----------|---------|
+| `opencode.jsonc` | Yes | API keys (Context7, etc.), plugins, MCPs, permissions |
+| `oh-my-opencode-slim.json` | Optional | Model routing, multiplexer layout |
+| `ocx.jsonc` | Optional | Skill registry configuration |
+| `dcp.jsonc` | Optional | Dynamic context pruning rules |
+
+**Required API keys** (add to `opencode.jsonc` or set as environment variables):
+- `CONTEXT7_API_KEY` — Get at [context7.com](https://context7.com)
+- `EXA_API_KEY` — Get at [exa.ai](https://exa.ai) (optional)
+- `COMPOSIO_API_KEY` — Get at [composio.dev](https://composio.dev) (optional)
+
+### Verify It Works
+
+```bash
+opencode agent list     # should show 19 agents
+opencode skill list     # should show managed + gstack skills
+opencode run review     # test a review command
 ```
 
 ## ▸ Configuration

@@ -95,7 +95,7 @@ async function cloneOrUpdateRepo(repoDir: string): Promise<void> {
       spinner.succeed('Repository copied from local');
     } else {
       // This would be the actual git clone in production
-      await execa('git', ['clone', 'https://github.com/your-username/my-agent-harness.git', repoDir]);
+      await execa('git', ['clone', 'https://github.com/sanjanb/my-agent-harness.git', repoDir]);
       spinner.succeed('Repository cloned');
     }
   }
@@ -277,7 +277,7 @@ async function install(options: InstallOptions = {}): Promise<void> {
   console.log(`  3. ${chalk.yellow('Run:')} opencode run review`);
   console.log(`  4. ${chalk.yellow('Run:')} opencode skill list`);
   console.log(`\n${chalk.blue('Documentation:')} ${repoDir}/README.md`);
-  console.log(`${chalk.blue('Repository:')} https://github.com/your-username/my-agent-harness\n`);
+  console.log(`${chalk.blue('Repository:')} https://github.com/sanjanb/my-agent-harness\n`);
 }
 
 program
