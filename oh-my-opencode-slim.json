@@ -49,7 +49,7 @@
         "mcps": []
       },
       "fixer": {
-        "model": "opencode/laguna-s-2.1-free",
+        "model": "opencode/nemotron-3-ultra-free",
         "variant": "high",
         "skills": [],
         "mcps": []
