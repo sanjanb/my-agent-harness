@@ -16,7 +16,6 @@ dependencies:
   - agent: orchestration/babysit-merge
     purpose: "Monitor CI and auto-merge passing branches"
     optional: true
-    optional: true
 ---
 
 # Build Agent
