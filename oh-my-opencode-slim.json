@@ -55,7 +55,7 @@
         "mcps": []
       },
       "observer": {
-        "model": "opencode/big-pickle",
+        "model": "opencode-zen/kimi-k2.5-free",
         "variant": "low",
         "skills": [],
         "mcps": []
