@@ -3,7 +3,10 @@ description: Build orchestrator that coordinates implementation through delegati
 mode: subagent
 dependencies:
   - agent: explore
-    purpose: "Map codebase before orchestrating implementation"
+    purpose: "Map codebase structure before creating execution plan"
+    optional: false
+  - agent: quality-gate
+    purpose: "Verify implementations meet quality standards before merge"
     optional: false
   - agent: orchestration/worktree-manager
     purpose: "Create isolated worktrees for parallel agent execution"

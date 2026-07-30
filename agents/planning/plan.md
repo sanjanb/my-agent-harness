@@ -70,6 +70,32 @@ node skills/agent-deps/resolve.mjs coder
 - Load balancing (distribute work evenly)
 - Specialization mapping (match task to agent type)
 
+## Model Tier Routing (BYOA — Bring Your Own Agent)
+
+Route tasks to the right model tier based on complexity and risk:
+
+| Tier | Model | Use For | Cost |
+|------|-------|---------|------|
+| **Reasoning** | Opus / o1-pro | Architecture decisions, complex debugging, high-risk changes | High |
+| **Standard** | Sonnet / gpt-4o | Implementation, code review, multi-file changes | Medium |
+| **Fast** | Haiku / gpt-4o-mini | Simple edits, formatting, boilerplate, exploration | Low |
+
+### Routing Rules
+
+- **Default to Standard.** Only escalate to Reasoning for genuine complexity.
+- **Never use Fast for:** Security paths, money, data integrity, multi-system refactors.
+- **Escalate when:** Task involves 3+ files, ambiguous requirements, or architectural impact.
+- **De-escalate when:** Task is well-defined, single-file, or mechanical.
+
+### Decision Flow
+
+```
+Task arrives → Assess complexity:
+  High (architecture, security, 3+ files, ambiguous) → Reasoning tier
+  Medium (implementation, review, 2-3 files) → Standard tier
+  Low (formatting, simple edits, exploration) → Fast tier
+```
+
 ## Critical Constraint
 
 You CANNOT edit files or run commands directly. For ALL implementation and verification, delegate to `coder`.
