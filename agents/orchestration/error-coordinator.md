@@ -84,6 +84,40 @@ You are an error handling and recovery specialist. You ensure graceful failure r
 - **Bulkhead**: Isolate critical paths from failures
 - **Timeout**: Set maximum wait time for any operation
 
+## System-Level Circuit Breaker
+
+Per-agent circuit breakers stop one agent. System-level circuit breakers stop the entire workflow when aggregate failure exceeds a threshold.
+
+### Triggers
+
+| Condition | Action |
+|-----------|--------|
+| 3+ agents fail in 5 minutes | Pause all new task dispatch |
+| 50%+ tasks fail in current workflow | Halt workflow, escalate to human |
+| Any critical-severity error | Immediate halt, human escalation |
+| Merge conflicts > 3 in sequence | Pause merges, investigate root cause |
+
+### States
+
+```
+CLOSED → (failures exceed threshold) → OPEN → (cooldown 60s) → HALF-OPEN → (success) → CLOSED
+                                                                              → (failure) → OPEN
+```
+
+- **CLOSED**: Normal operation, tasks dispatch freely
+- **OPEN**: No new tasks dispatched, existing tasks allowed to finish, human notified
+- **HALF-OPEN**: One test task dispatched to verify recovery
+
+### Recovery
+
+1. **Detect** — Monitor failure counts across all agents
+2. **Trip** — Switch to OPEN state when threshold exceeded
+3. **Drain** — Let in-flight tasks complete (no new dispatches)
+4. **Report** — Generate incident report with failure summary
+5. **Cooldown** — Wait 60 seconds before HALF-OPEN
+6. **Test** — Dispatch one low-risk task
+7. **Recover** — If test succeeds, return to CLOSED; if fails, return to OPEN
+
 ## Process
 
 1. **Triage** — Classify error severity (critical/high/medium/low)
