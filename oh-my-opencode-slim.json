@@ -119,6 +119,54 @@
         "verification-planning"
       ],
       "orchestratorPrompt": "Use for user story mapping: personas, user journeys, vertical slices, epics, and story decomposition."
+    },
+    "orchestration-build": {
+      "model": "opencode/nemotron-3-ultra-free",
+      "variant": "high",
+      "skills": [],
+      "orchestratorPrompt": "Build orchestrator — coordinates implementation through delegation, manages parallel execution with worktrees, sequential merge strategy."
+    },
+    "orchestration-context-manager": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "variant": "medium",
+      "skills": [],
+      "orchestratorPrompt": "Context optimization — manages context windows, prioritizes information, handles overflow and compression."
+    },
+    "orchestration-error-coordinator": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "variant": "medium",
+      "skills": [],
+      "orchestratorPrompt": "Error handling — manages cascading failures, recovery strategies, circuit breaker, system resilience."
+    },
+    "orchestration-worktree-manager": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "variant": "low",
+      "skills": [],
+      "orchestratorPrompt": "Git worktree isolation — creates isolated worktrees per agent task, enables safe parallel execution."
+    },
+    "orchestration-task-board": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "variant": "low",
+      "skills": [],
+      "orchestratorPrompt": "Task board — tracks task status, atomic claiming, crash recovery, dependency management."
+    },
+    "orchestration-quality-gate": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "variant": "medium",
+      "skills": [],
+      "orchestratorPrompt": "Quality verification — checks compilation, philosophy, tests, style, security, scope, minimalism before marking tasks done."
+    },
+    "orchestration-babysit-merge": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "variant": "low",
+      "skills": [],
+      "orchestratorPrompt": "CI watcher — monitors PR checks and auto-merges when all pass. Does not fix CI failures."
+    },
+    "orchestration-observability": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "variant": "medium",
+      "skills": [],
+      "orchestratorPrompt": "Observability — tracks agent metrics, traces workflow execution, surfaces system health and bottlenecks."
     }
   }
 }
