@@ -283,6 +283,11 @@ graph LR
 | **build** | Build orchestrator that coordinates implementation through delegation. Parses requests, dispatches to specialist agents, monitors progress, and reports results. |
 | **context-manager** | Context optimization expert — manages context windows, prioritizes information, and handles context overflow. |
 | **error-coordinator** | Error handling and recovery specialist — manages cascading failures, recovery strategies, and system resilience. |
+| **worktree-manager** | Git worktree isolation — creates isolated worktrees per agent task, enables safe parallel execution across branches. |
+| **task-board** | Task board with atomic claiming — tracks task status, prevents duplicate work, enables crash recovery. |
+| **quality-gate** | Automated quality verification — checks compilation, philosophy compliance, tests, style, security, scope, and minimalism before marking tasks done. |
+| **babysit-merge** | CI watcher — monitors PR checks and auto-merges when all pass. Does not fix CI failures. |
+| **observability** | Observability layer — tracks agent metrics, traces workflow execution, surfaces system health and bottlenecks. |
 
 ## ▸ Plugins
 
@@ -472,7 +477,7 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 │   ├── research/              #   explore, researcher
 │   ├── content/               #   scribe
 │   ├── review/                #   reviewer
-│   └── orchestration/         #   build, context-manager, error-coordinator
+│   └── orchestration/         #   build, context-manager, error-coordinator, worktree-manager, task-board, quality-gate, babysit-merge, observability
 ├── plugins/                   # TypeScript plugins
 │   ├── background-agents.ts   #   Unified delegation system
 │   ├── worktree.ts            #   Git worktree management
