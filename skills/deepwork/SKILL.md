@@ -132,6 +132,38 @@ information, reconcile the result and record the accepted findings here so later
 planning and reviews share the same context instead of rediscovering it.
 Don't put actual contents of local files, reference them by path only.
 
+## Parallel Execution with Worktrees
+
+When a deepwork phase includes multiple independent agents:
+
+1. **Create worktrees** — Use `orchestration/worktree-manager` to create isolated worktrees per agent
+2. **Register tasks** — Use `orchestration/task-board` to register and claim tasks atomically
+3. **Dispatch agents** — Each agent works in its own worktree, no conflicts
+4. **Sequential merge** — After agents complete, merge branches one at a time:
+   ```
+   Branch A → merge to main → verify
+   Branch B → merge to main → verify
+   Branch C → merge to main → verify
+   ```
+5. **Clean up** — Remove worktrees after successful merges
+
+**Rule:** Never merge multiple branches simultaneously. Always sequential. Always verify after each merge.
+
+## Definition of Done
+
+Before dispatching any task, define explicit completion criteria in the deepwork file:
+
+```markdown
+## Task: [name]
+**Definition of Done:**
+- [ ] [Specific criterion 1]
+- [ ] [Specific criterion 2]
+- [ ] [Tests pass]
+- [ ] [No regressions]
+```
+
+A task is not complete until ALL criteria are checked.
+
 ## Scheduler Discipline
 
 Use the scheduler model throughout:
@@ -142,4 +174,5 @@ Use the scheduler model throughout:
 - avoid blocking Orchestrator lane while background jobs run; if no independent
   work remains, stop briefly and let the completion event resume the workflow;
 - do not advance to the next phase while relevant jobs are running or terminal
-  results are unreconciled.
+  results are unreconciled;
+- use worktree isolation for parallel agents to prevent filesystem conflicts.

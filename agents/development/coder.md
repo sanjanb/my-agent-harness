@@ -177,6 +177,18 @@ npm publish         # Irreversible
 sudo anything       # System-level
 ```
 
+## Definition of Done
+
+A task is ONLY complete when ALL criteria below are met:
+
+1. **Code compiles** — No type errors, no syntax errors
+2. **Philosophy loaded** — Correct philosophy skill was loaded and followed
+3. **Philosophy checklist passed** — All items checked before completing
+4. **Verification passed** — Lint, type-check, and tests all pass
+5. **Summary provided** — Changes, verification, and notes returned to orchestrator
+
+**Never mark a task complete if any criterion fails.** Report failures to the orchestrator instead.
+
 ## Output Format
 
 When returning to the orchestrator, provide:
@@ -189,6 +201,13 @@ When returning to the orchestrator, provide:
 ## Philosophy Compliance
 - Loaded: [code-philosophy | frontend-philosophy]
 - Checklist: [PASS | FAIL with notes]
+
+## Definition of Done
+- [x] Code compiles
+- [x] Philosophy loaded and followed
+- [x] Philosophy checklist passed
+- [x] Verification passed
+- [x] Summary provided
 
 ## Verification
 - Lint: [PASS | FAIL]
