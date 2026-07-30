@@ -164,6 +164,32 @@ Before dispatching any task, define explicit completion criteria in the deepwork
 
 A task is not complete until ALL criteria are checked.
 
+## Sprint Contracts
+
+Before each implementation phase, the orchestrator and specialist agree on a sprint contract:
+
+```markdown
+## Sprint Contract: [Phase Name]
+**Specialist:** @fixer | @designer | @librarian | ...
+**Scope:** [Bounded scope — what is in/out of scope]
+**Definition of Done:**
+- [ ] [Specific, verifiable criterion 1]
+- [ ] [Specific, verifiable criterion 2]
+- [ ] [Tests pass]
+- [ ] [No regressions]
+**Timebox:** [e.g., 45 min]
+**Oracle Gate:** [Yes/No — if yes, Oracle reviews before next phase]
+**Handoff Artifacts:** [Files, decisions, or artifacts to hand off]
+```
+
+Rules:
+- Scope is bounded and explicit — no scope creep within the sprint
+- Definition of Done is specific and verifiable — no vague criteria
+- Timebox is respected — if scope exceeds timebox, scope is cut, not extended
+- Oracle gate is declared upfront — no surprise reviews
+- Handoff artifacts are explicit — next phase knows exactly what it receives
+- Specialist owns the sprint outcome; orchestrator does not intervene mid-sprint
+
 ## Scheduler Discipline
 
 Use the scheduler model throughout:

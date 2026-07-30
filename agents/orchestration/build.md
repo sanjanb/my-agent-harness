@@ -13,6 +13,9 @@ dependencies:
     optional: true
   - agent: orchestration/task-board
     purpose: "Manage distributed task ownership and status tracking"
+  - agent: orchestration/babysit-merge
+    purpose: "Monitor CI and auto-merge passing branches"
+    optional: true
     optional: true
 ---
 
