@@ -149,7 +149,7 @@ sequenceDiagram
 
 #### Layer 4 → Execution (Runtime Layer)
 
-Deterministic. No LLM calls — just TypeScript plugins, MCP tool calls, and shell commands carrying out the orchestrated work.
+Deterministic. No LLM calls — just TypeScript plugins, MCP tool calls, shell commands, and 32 runtime scripts carrying out the orchestrated work.
 
 ```mermaid
 graph TD
@@ -167,6 +167,16 @@ graph TD
         GH["gh_grep<br/>GitHub code search"]
     end
 
+    subgraph Scripts["Runtime Scripts (32)"]
+        R1["R1 Core<br/>flock, state, correlation, log, workflow-init"]
+        R2["R2 Execution<br/>dispatch, task-board, dag-execute, checkpoint, recover"]
+        R3["R3 Isolation<br/>worktree, merge, merge-conflict, cleanup"]
+        R4["R4 Cost<br/>budget, budget-enforce, cache, cost, cost-report"]
+        R5["R5 Observability<br/>replay, trace, health, dashboard"]
+        R6["R6 Quality<br/>quality-gate, evaluate, convention, auto-dream, load-context"]
+        R7["R7 Safety<br/>stale-task, dry-run, workflow-complete, hooks"]
+    end
+
     subgraph Ext["External Tools"]
         GIT["git"]
         NPM["npm / node"]
@@ -182,8 +192,16 @@ graph TD
     EX -->|"web fetch"| Ext
     GH -->|"code search"| Ext
 
+    R1 --> R2
+    R2 --> R3
+    R3 --> R4
+    R4 --> R5
+    R5 --> R6
+    R6 --> R7
+
     style Plugins fill:#0f3460,stroke:#53d769,color:#fff
     style MCP fill:#0f3460,stroke:#4a90d9,color:#fff
+    style Scripts fill:#16213e,stroke:#e94560,color:#fff
     style Ext fill:#1a1a2e,stroke:#888,color:#fff
     style BG fill:#0f3460,stroke:#53d769,color:#fff
     style WT fill:#0f3460,stroke:#53d769,color:#fff
@@ -193,6 +211,16 @@ graph TD
     style CX fill:#0f3460,stroke:#4a90d9,color:#fff
     style EX fill:#0f3460,stroke:#4a90d9,color:#fff
     style GH fill:#0f3460,stroke:#4a90d9,color:#fff
+    style R1 fill:#16213e,stroke:#e94560,color:#fff
+    style R2 fill:#16213e,stroke:#e94560,color:#fff
+    style R3 fill:#16213e,stroke:#e94560,color:#fff
+    style R4 fill:#16213e,stroke:#e94560,color:#fff
+    style R5 fill:#16213e,stroke:#e94560,color:#fff
+    style R6 fill:#16213e,stroke:#e94560,color:#fff
+    style R7 fill:#16213e,stroke:#e94560,color:#fff
+    style GIT fill:#1a1a2e,stroke:#888,color:#fff
+    style NPM fill:#1a1a2e,stroke:#888,color:#fff
+    style SH fill:#1a1a2e,stroke:#888,color:#fff
 ```
 
 ### Request Flow (End-to-End)
