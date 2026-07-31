@@ -190,3 +190,13 @@ When agents write conventions:
 ## Health
 - [status message]
 ```
+
+## Runtime Scripts
+
+AutoDream uses these scripts:
+
+- `scripts/auto-dream.sh` — Memory consolidation between sessions
+- `scripts/convention.sh` — Reads/writes conventions
+- `scripts/replay.sh` — Reads replay files for consolidation
+- `scripts/log.sh` — Logs consolidation events
+- `scripts/state.sh` — Reads workflow state

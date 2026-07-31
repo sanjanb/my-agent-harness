@@ -92,3 +92,13 @@ You are a context optimization specialist. You maximize the efficiency of AI con
 ## Compressed
 - [Summary of what was compressed and key preserved details]
 ```
+
+## Runtime Integration
+
+Context manager uses these scripts:
+
+- `scripts/load-context.sh` — Loads all context for agent sessions
+- `scripts/convention.sh` — Reads/writes agent-writable conventions
+- `scripts/auto-dream.sh` — Memory consolidation between sessions
+- `scripts/state.sh` — Reads workflow state for context
+- `scripts/log.sh` — Logs context operations

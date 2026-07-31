@@ -134,3 +134,12 @@ Task arrives → Identify changed files:
     Score < 6.0 → Verdict: REJECT → Restart with clearer spec
     Max 3 cycles reached → Escalate to orchestrator
 ```
+
+## Runtime Integration
+
+Quality gate uses these scripts:
+
+- `scripts/quality-gate.sh` — Runs 7 quality checks (compilation, philosophy, tests, style, security, scope, minimalism)
+- `scripts/evaluate.sh` — Scores implementation across 5 weighted dimensions
+- `scripts/state.sh` — Records quality gate results
+- `scripts/log.sh` — Logs quality decisions

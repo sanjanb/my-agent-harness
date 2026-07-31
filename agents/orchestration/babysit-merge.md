@@ -80,3 +80,13 @@ Parallel agents create branches/PRs that need merging once CI passes. Human baby
   "merge_commit": "abc1234"
 }
 ```
+
+## Runtime Integration
+
+Babysit-merge uses these scripts:
+
+- `scripts/merge.sh` — Merges completed branches into main
+- `scripts/merge-conflict.sh` — Detects and reports merge conflicts
+- `scripts/health.sh` — Checks CI status
+- `scripts/state.sh` — Tracks merge state
+- `scripts/log.sh` — Logs merge operations

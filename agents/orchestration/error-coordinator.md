@@ -299,3 +299,14 @@ After workflow completes successfully:
 ## Prevention
 - [What to change to prevent this in future]
 ```
+
+## Runtime Integration
+
+Error coordinator uses these scripts:
+
+- `scripts/recover.sh` — Reads checkpoints, determines recovery plan
+- `scripts/checkpoint.sh` — Saves/resumes state from checkpoints
+- `scripts/state.sh` — Updates workflow state on recovery
+- `scripts/log.sh` — Logs recovery actions
+- `scripts/trace.sh` — Traces recovery operations
+- `scripts/stale-task.sh` — Detects stale tasks for cleanup

@@ -263,3 +263,14 @@ When replay files exceed 10 workflows:
 ```jsonl
 {"archived":"wf-a1b2c3d4","date":"2026-07-30","steps":5,"total_tokens":9000,"total_cost":0.20,"status":"complete"}
 ```
+
+## Runtime Integration
+
+Observability uses these scripts:
+
+- `scripts/replay.sh` — Records and replays session state
+- `scripts/trace.sh` — Correlation tracing across agents
+- `scripts/health.sh` — System health checks
+- `scripts/dashboard.sh` — Dashboard output
+- `scripts/log.sh` — Structured logging
+- `scripts/cost-report.sh` — Cost reporting

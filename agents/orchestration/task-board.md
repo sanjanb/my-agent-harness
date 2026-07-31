@@ -271,3 +271,13 @@ const summary = {
 ## Board Health
 - [HEALTHY | NEEDS_ATTENTION | CRITICAL]
 ```
+
+## Runtime Integration
+
+Task board uses these scripts:
+
+- `scripts/task-board.sh` — Atomic claim/release/complete/status operations
+- `scripts/stale-task.sh` — Detects and releases stale tasks
+- `scripts/state.sh` — Reads/writes task board state
+- `scripts/log.sh` — Logs task operations
+- `scripts/correlation.sh` — Generates correlation IDs for task tracing

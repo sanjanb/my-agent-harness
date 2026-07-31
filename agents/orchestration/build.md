@@ -649,3 +649,24 @@ grep '"cost":[0-9]*\.[0-9]' .opencode/logs.jsonl
 | Quality Gate   | Quality checks include `correlationId` in reports                |
 | Task Board     | Task claims include `correlationId` for audit trail              |
 | Error Reports  | Error reports include `correlationId` for root cause analysis    |
+
+## Runtime Integration
+
+Build orchestrator uses these scripts for mechanical execution:
+
+- `scripts/workflow-init.sh` — Creates workflow directory and initial state
+- `scripts/dispatch.sh` — Dispatches agents with correlation IDs
+- `scripts/dag-execute.sh` — Validates and executes DAG plans
+- `scripts/state.sh` — Reads/writes workflow state
+- `scripts/log.sh` — Structured logging
+- `scripts/correlation.sh` — Correlation ID generation
+- `scripts/checkpoint.sh` — Saves/resumes workflow state
+- `scripts/recover.sh` — Crash recovery
+- `scripts/cache.sh` — Semantic cache lookup
+- `scripts/budget.sh` — Token budget management
+- `scripts/budget-enforce.sh` — Budget enforcement before dispatch
+- `scripts/cost.sh` — Cost tracking
+- `scripts/replay.sh` — Session replay recording
+- `scripts/trace.sh` — Correlation tracing
+
+Agent reads markdown for decisions, calls scripts for execution.

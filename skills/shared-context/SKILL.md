@@ -345,3 +345,13 @@ Update shared context when:
 - [LOADED | CREATED | UPDATED]
 - **Conventions:** [READ | WRITTEN | SKIP (dedup)]
 ```
+
+## Runtime Scripts
+
+Shared context uses these scripts for mechanical operations:
+
+- `scripts/convention.sh` — CRUD for conventions.jsonl
+- `scripts/load-context.sh` — Loads all context for agent sessions
+- `scripts/auto-dream.sh` — Memory consolidation
+- `scripts/state.sh` — Reads workflow state
+- `scripts/log.sh` — Logs context operations

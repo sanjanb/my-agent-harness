@@ -204,3 +204,14 @@ git worktree remove .worktrees/dag/wf-a1b2c3d4-node-5-fixer
 # Prune stale references
 git worktree prune
 ```
+
+## Runtime Integration
+
+Worktree manager uses these scripts:
+
+- `scripts/worktree.sh` — Creates, validates, and manages git worktrees
+- `scripts/merge.sh` — Merges completed worktree branches
+- `scripts/merge-conflict.sh` — Detects and reports merge conflicts
+- `scripts/cleanup.sh` — Post-merge cleanup of worktrees and branches
+- `scripts/state.sh` — Tracks worktree state
+- `scripts/log.sh` — Logs worktree operations
