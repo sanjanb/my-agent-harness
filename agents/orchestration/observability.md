@@ -86,9 +86,109 @@ Workflow: {name}
 - Query git log for timing information
 - Calculate metrics from collected data
 - Generate reports and recommendations
+- Query correlation IDs in logs
 
 **NEVER:**
 - Modify agent behavior directly
 - Override agent decisions
 - Access model API billing (read-only estimates only)
 - Block or delay agent execution
+
+## Correlation ID Integration
+
+Every workflow event carries a correlation ID for traceability. Use these IDs to trace execution paths and debug failures.
+
+### ID Format
+
+```
+wf-{uuid8}-step-{n}-agent-{type}
+```
+
+Example: `wf-a1b2c3d4-step-3-agent-fixer`
+
+### Log Storage
+
+All workflow events append to `.opencode/logs.jsonl`:
+
+```jsonl
+{"ts":"2026-07-30T10:00:00Z","cid":"wf-a1b2c3d4-step-3-agent-fixer","event":"dispatch","task":"Add error handling to auth","model":"deepseek-v4-flash-fast","tokens":0,"cost":0}
+{"ts":"2026-07-30T10:00:05Z","cid":"wf-a1b2c3d4-step-3-agent-fixer","event":"complete","tokens":2500,"cost":0.05,"duration_ms":5000}
+{"ts":"2026-07-30T10:00:06Z","cid":"wf-a1b2c3d4-step-4-agent-fixer","event":"dispatch","task":"Add error handling to register","model":"deepseek-v4-flash-fast","tokens":0,"cost":0}
+{"ts":"2026-07-30T10:00:12Z","cid":"wf-a1b2c3d4-step-4-agent-fixer","event":"error","error":"Type error in line 42","tokens":1500,"cost":0.03}
+```
+
+### Query Commands
+
+```bash
+# All logs for a workflow
+grep "wf-a1b2c3d4" .opencode/logs.jsonl
+
+# All logs for step 3
+grep "wf-a1b2c3d4-step-3" .opencode/logs.jsonl
+
+# All fixer agent logs across workflows
+grep "agent-fixer" .opencode/logs.jsonl
+
+# Find all errors
+grep '"event":"error"' .opencode/logs.jsonl
+
+# Find expensive operations (cost > 0.10)
+grep '"cost":[0-9]' .opencode/logs.jsonl | grep -v '"cost":0'
+
+# Find slow operations (> 5000ms)
+grep '"duration_ms":[0-9]' .opencode/logs.jsonl
+
+# Timeline for a workflow (sort by timestamp)
+grep "wf-a1b2c3d4" .opencode/logs.jsonl | sort -t'"ts":"' -k2
+```
+
+### Debugging Workflow Failures
+
+**Scenario:** Workflow failed at step 5 of 8.
+
+```bash
+# 1. Find all logs for this workflow
+grep "wf-b3c4d5e6" .opencode/logs.jsonl
+
+# 2. Identify the failing step
+grep '"event":"error"' .opencode/logs.jsonl | grep "wf-b3c4d5e6"
+
+# 3. Get full context for that step
+grep "wf-b3c4d5e6-step-5" .opencode/logs.jsonl
+
+# 4. See what happened before the failure
+grep "wf-b3c4d5e6-step-1\|wf-b3c4d5e6-step-2\|wf-b3c4d5e6-step-3\|wf-b3c4d5e6-step-4" .opencode/logs.jsonl
+
+# 5. Check if similar failures occurred before
+grep '"event":"error"' .opencode/logs.jsonl | grep "agent-fixer"
+```
+
+### Trace Report Format
+
+```markdown
+## Workflow Trace: wf-a1b2c3d4
+
+| Step | Agent    | Event    | Duration | Tokens | Cost  | Status |
+|------|----------|----------|----------|--------|-------|--------|
+| 1    | explorer | complete | 2.1s     | 800    | 0.02  | ✅      |
+| 2    | librarian| complete | 4.3s     | 1200   | 0.03  | ✅      |
+| 3    | fixer    | complete | 5.0s     | 2500   | 0.05  | ✅      |
+| 4    | fixer    | error    | 6.2s     | 1500   | 0.03  | ❌      |
+
+**Total:** 17.6s | 6000 tokens | $0.13
+**Failed at:** Step 4 (fixer) — Type error in line 42
+**Blast radius:** Steps 5-8 never ran
+```
+
+### Cost Analysis by Correlation ID
+
+```bash
+# Total cost per workflow
+grep "wf-a1b2c3d4" .opencode/logs.jsonl | grep -o '"cost":[0-9.]*' | awk -F: '{sum+=$2} END {print "Total: $" sum}'
+
+# Cost per agent type
+grep "wf-a1b2c3d4" .opencode/logs.jsonl | grep -o '"cid":"[^"]*","event":"[^"]*","task":"[^"]*","model":"[^"]*","tokens":[0-9]*,"cost":[0-9.]*'
+
+# Most expensive steps
+grep "wf-a1b2c3d4" .opencode/logs.jsonl | grep '"event":"complete"' | sort -t'"cost":' -k2 -rn
+```

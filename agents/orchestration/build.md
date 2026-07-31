@@ -254,6 +254,7 @@ When merging parallel branches:
 - Escalate blockers to the parent orchestrator
 - Define Definition of Done for each task
 - Manage sequential merge strategy
+- Generate and propagate correlation IDs for all workflows
 
 ❌ **NEVER:**
 - Edit files yourself
@@ -262,3 +263,92 @@ When merging parallel branches:
 - Write docs — that's `content-scribe`'s job
 - Resolve merge conflicts automatically — escalate to orchestrator
 - Merge multiple branches simultaneously — always sequential
+- Dispatch agents without correlation ID
+
+## Correlation IDs
+
+Every workflow carries a unique trace ID for debugging multi-agent execution.
+
+### ID Format
+
+```
+wf-{uuid8}-step-{n}-agent-{type}
+```
+
+| Part    | Example  | Meaning                         |
+| ------- | -------- | ------------------------------- |
+| `wf-`     | `wf-`      | Workflow prefix                 |
+| `{uuid8}` | `a1b2c3d4` | First 8 chars of UUID4          |
+| `-step-`  | `-step-`   | Step separator                  |
+| `{n}`     | `3`        | Step number (1-indexed)         |
+| `-agent-` | `-agent-`  | Agent separator                 |
+| `{type}`  | `fixer`    | Agent type (fixer/designer/etc) |
+
+### Generation
+
+Generate once at workflow start:
+
+```
+workflow_id = "wf-" + uuid4().hex[:8]
+```
+
+Example: `wf-a1b2c3d4`
+
+### Propagation
+
+Every agent dispatch includes the correlation ID:
+
+```
+Dispatch to @fixer
+  correlation_id: wf-a1b2c3d4-step-3-agent-fixer
+  task: Add error handling to auth module
+```
+
+### Log Format
+
+All workflow events append to `.opencode/logs.jsonl`:
+
+```jsonl
+{"ts":"2026-07-30T10:00:00Z","cid":"wf-a1b2c3d4-step-3-agent-fixer","event":"dispatch","task":"Add error handling to auth","model":"deepseek-v4-flash-fast","tokens":0,"cost":0}
+{"ts":"2026-07-30T10:00:05Z","cid":"wf-a1b2c3d4-step-3-agent-fixer","event":"complete","tokens":2500,"cost":0.05,"duration_ms":5000}
+```
+
+| Field      | Type   | Description                    |
+| ---------- | ------ | ------------------------------ |
+| `ts`         | string | ISO-8601 timestamp             |
+| `cid`        | string | Full correlation ID            |
+| `event`      | string | dispatch / complete / error    |
+| `task`       | string | Task description               |
+| `model`      | string | Model used                     |
+| `tokens`     | number | Tokens consumed                |
+| `cost`       | number | Cost in USD                    |
+| `duration_ms`| number | Execution time in milliseconds |
+| `error`      | string | Error message (on error event) |
+
+### Query Examples
+
+```bash
+# All logs for a workflow
+grep "wf-a1b2c3d4" .opencode/logs.jsonl
+
+# All logs for step 3
+grep "wf-a1b2c3d4-step-3" .opencode/logs.jsonl
+
+# All fixer agent logs across workflows
+grep "agent-fixer" .opencode/logs.jsonl
+
+# Find errors
+grep '"event":"error"' .opencode/logs.jsonl
+
+# Find expensive operations (cost > 0.10)
+grep '"cost":[0-9]*\.[0-9]' .opencode/logs.jsonl
+```
+
+### Integration with Other Systems
+
+| System         | Correlation ID Use                                               |
+| -------------- | ---------------------------------------------------------------- |
+| Semantic Cache | Cache entries include `correlationId` for traceability           |
+| Quality Gate   | Quality checks include `correlationId` in reports                |
+| Task Board     | Task claims include `correlationId` for audit trail              |
+| Error Reports  | Error reports include `correlationId` for root cause analysis    |
