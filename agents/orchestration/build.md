@@ -40,12 +40,226 @@ You CANNOT edit files or run commands directly. For ALL implementation and verif
 
 1. **Parse** — Understand the build/implementation request
 2. **Resolve Dependencies** — Run `node skills/agent-deps/resolve.mjs <agent>` for each agent you plan to delegate to. Execute required dependencies first.
-3. **Cache Check** — Before dispatching, check semantic cache for similar completed task
-4. **Dispatch** — Delegate tasks to appropriate agents via `delegate`
-5. **Monitor** — Use `delegation_read` and `delegation_list` to track progress
-6. **Verify** — Confirm all delegations completed successfully
-7. **Cache Store** — After task completes, store result in cache for future reuse
-8. **Report** — Summarize what was built and verification results
+3. **Generate DAG** — Create explicit task graph with dependencies before dispatching
+4. **Validate DAG** — Check for cycles, missing deps, self-dependencies
+5. **Cache Check** — Before dispatching each node, check semantic cache for similar completed task
+6. **Execute DAG** — Dispatch nodes in topological order, parallelizing independent nodes
+7. **Monitor** — Use `delegation_read` and `delegation_list` to track progress
+8. **Checkpoint** — After each node completes, save state for crash recovery
+9. **Verify** — Confirm all nodes completed successfully
+10. **Cache Store** — After task completes, store result in cache for future reuse
+11. **Report** — Summarize what was built and verification results
+
+## Plan-and-Execute DAG
+
+Before dispatching any agents, generate an explicit Directed Acyclic Graph (DAG) of subtasks with dependency edges. Execute in topological order — independent tasks run in parallel, dependent tasks wait.
+
+### DAG Schema
+
+```json
+{
+  "workflowId": "wf-a1b2c3d4",
+  "createdAt": "2026-07-30T10:00:00Z",
+  "nodes": [
+    {
+      "id": 1,
+      "task": "Explore auth module structure",
+      "agent": "explorer",
+      "dependencies": [],
+      "estimatedTokens": 800,
+      "estimatedCost": 0.02,
+      "status": "pending",
+      "correlationId": "wf-a1b2c3d4-step-1-agent-explorer",
+      "worktreeBranch": null,
+      "result": null
+    },
+    {
+      "id": 2,
+      "task": "Research JWT best practices",
+      "agent": "librarian",
+      "dependencies": [],
+      "estimatedTokens": 1200,
+      "estimatedCost": 0.03,
+      "status": "pending",
+      "correlationId": "wf-a1b2c3d4-step-2-agent-librarian",
+      "worktreeBranch": null,
+      "result": null
+    },
+    {
+      "id": 3,
+      "task": "Design auth schema",
+      "agent": "designer",
+      "dependencies": [1, 2],
+      "estimatedTokens": 2000,
+      "estimatedCost": 0.05,
+      "status": "pending",
+      "correlationId": "wf-a1b2c3d4-step-3-agent-designer",
+      "worktreeBranch": null,
+      "result": null
+    },
+    {
+      "id": 4,
+      "task": "Implement auth endpoints",
+      "agent": "fixer",
+      "dependencies": [3],
+      "estimatedTokens": 3000,
+      "estimatedCost": 0.06,
+      "status": "pending",
+      "correlationId": "wf-a1b2c3d4-step-4-agent-fixer",
+      "worktreeBranch": null,
+      "result": null
+    },
+    {
+      "id": 5,
+      "task": "Write auth tests",
+      "agent": "fixer",
+      "dependencies": [3],
+      "estimatedTokens": 2000,
+      "estimatedCost": 0.04,
+      "status": "pending",
+      "correlationId": "wf-a1b2c3d4-step-5-agent-fixer",
+      "worktreeBranch": null,
+      "result": null
+    }
+  ],
+  "stats": {
+    "totalNodes": 5,
+    "maxParallel": 2,
+    "estimatedTotalTokens": 9000,
+    "estimatedTotalCost": 0.20,
+    "estimatedDuration": "15-20 minutes"
+  }
+}
+```
+
+### Node Fields
+
+| Field           | Type   | Description                                    |
+| --------------- | ------ | ---------------------------------------------- |
+| `id`              | number | Unique node ID (1-indexed)                     |
+| `task`            | string | Task description                               |
+| `agent`           | string | Agent type to dispatch                         |
+| `dependencies`    | array  | Node IDs that must complete first              |
+| `estimatedTokens` | number | Estimated token usage                          |
+| `estimatedCost`   | number | Estimated cost in USD                          |
+| `status`          | string | pending / running / complete / failed / skipped |
+| `correlationId`   | string | Trace ID for this node                         |
+| `worktreeBranch`  | string | Git branch (if worktree isolation)             |
+| `result`          | object | Agent output (when complete)                   |
+
+### DAG Validation
+
+Before execution, validate the DAG:
+
+| Rule            | Check                        | Invalid Example          |
+| --------------- | ---------------------------- | ------------------------ |
+| No cycles       | A→B→C→A is forbidden         | Node 1→2→3→1             |
+| All deps exist  | Dependencies must be in DAG  | Node 5 depends on Node 99 |
+| No self-dep     | Node cannot depend on itself | Node 3 depends on Node 3 |
+| Valid agent     | Agent type must exist        | Node uses `nonexistent`    |
+
+Validation fails → abort workflow, report error.
+
+### Topological Execution Order
+
+Group nodes by dependency level:
+
+```
+Level 0: Nodes with no dependencies → execute in parallel
+Level 1: Nodes depending only on Level 0 → execute in parallel
+Level 2: Nodes depending on Level 0+1 → execute in parallel
+...
+Level N: Nodes depending on all previous levels → execute
+```
+
+Example:
+```
+Level 0: [Node 1, Node 2] → parallel (explorer + librarian)
+Level 1: [Node 3] → waits for 1+2 (designer)
+Level 2: [Node 4, Node 5] → parallel (fixer + fixer)
+```
+
+### DAG Generation Process
+
+1. **Parse request** — Break down the task into subtasks
+2. **Identify agents** — Match each subtask to agent type
+3. **Map dependencies** — Which tasks block which?
+4. **Estimate costs** — Token estimates per node
+5. **Generate DAG** — Create JSON schema
+6. **Validate** — Check rules above
+7. **Execute** — Topological order with parallelism
+
+### Execution Flow
+
+```
+DAG Generated
+    │
+    ├─ Validate (no cycles, deps exist)
+    │   └─ FAIL → abort, report error
+    │
+    ├─ Level 0 nodes (no deps)
+    │   ├─ Create worktrees (one per node)
+    │   ├─ Dispatch in parallel
+    │   └─ Wait for all to complete
+    │
+    ├─ Level 1 nodes (deps on Level 0)
+    │   ├─ Check: did all deps succeed?
+    │   │   ├─ YES → dispatch
+    │   │   └─ NO → skip (mark failed)
+    │   └─ Wait for completion
+    │
+    ├─ Level 2 nodes...
+    │
+    └─ Final node (quality gate)
+        └─ Verify all passed
+```
+
+### Checkpoint After Each Node
+
+After each node completes:
+1. Update node status to `complete`
+2. Store result in DAG
+3. Write checkpoint to `.opencode/checkpoints/{workflowId}.json`
+4. If crash → resume from last checkpoint
+
+### Failure Handling
+
+| Failure Type    | Action                                    |
+| --------------- | ----------------------------------------- |
+| Node fails      | Mark failed, block dependent nodes        |
+| Node times out  | Mark failed after 5 min timeout           |
+| All deps failed | Skip node (mark skipped)                  |
+| Partial failure | Continue with remaining independent nodes |
+
+### DAG Visualization
+
+```
+Workflow: wf-a1b2c3d4 (Add user authentication)
+
+Level 0: ┌─────────────────┐ ┌─────────────────┐
+         │ 1: explore      │ │ 2: research     │
+         │ @explorer       │ │ @librarian      │
+         │ est: $0.02      │ │ est: $0.03      │
+         └────────┬────────┘ └────────┬────────┘
+                  │                   │
+                  └─────────┬─────────┘
+                            │
+Level 1:            ┌───────┴───────┐
+                    │ 3: design     │
+                    │ @designer     │
+                    │ est: $0.05    │
+                    └───────┬───────┘
+                            │
+                  ┌─────────┴─────────┐
+                  │                   │
+Level 2: ┌────────┴────────┐ ┌───────┴────────┐
+         │ 4: implement    │ │ 5: test        │
+         │ @fixer          │ │ @fixer         │
+         │ est: $0.06      │ │ est: $0.04     │
+         └─────────────────┘ └────────────────┘
+
+Estimated: 15-20 min | 9000 tokens | $0.20
+```
 
 ## Semantic Caching Layer
 

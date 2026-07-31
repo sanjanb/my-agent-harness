@@ -128,3 +128,79 @@ refactor/<task-slug>  # Refactoring
 ## Notes
 [Any important context for the orchestrator]
 ```
+
+## DAG Integration
+
+When executing a Plan-and-Execute DAG, create worktrees per node for independent tasks.
+
+### Worktree-Per-Node Flow
+
+```
+DAG Level 0: [Node 1, Node 2] → independent
+    │
+    ├─ Create worktree for Node 1: .worktrees/explore-node-1
+    ├─ Create worktree for Node 2: .worktrees/research-node-2
+    │
+    ├─ Dispatch @explorer to worktree-1
+    ├─ Dispatch @librarian to worktree-2
+    │
+    └─ Wait for both to complete
+
+DAG Level 1: [Node 3] → depends on 1+2
+    │
+    ├─ Create worktree for Node 3: .worktrees/design-node-3
+    ├─ Merge results from Node 1 + Node 2 into worktree-3
+    ├─ Dispatch @designer to worktree-3
+    │
+    └─ Wait for completion
+
+DAG Level 2: [Node 4, Node 5] → independent (both depend on 3)
+    │
+    ├─ Create worktree for Node 4: .worktrees/implement-node-4
+    ├─ Create worktree for Node 5: .worktrees/test-node-5
+    ├─ Merge result from Node 3 into both worktrees
+    │
+    ├─ Dispatch @fixer to worktree-4
+    ├─ Dispatch @fixer to worktree-5
+    │
+    └─ Wait for both to complete
+```
+
+### Branch Naming for DAG Nodes
+
+```
+dag/<workflow-id>-node-<id>-<agent>
+
+Examples:
+dag/wf-a1b2c3d4-node-1-explorer
+dag/wf-a1b2c3d4-node-2-librarian
+dag/wf-a1b2c3d4-node-3-designer
+dag/wf-a1b2c3d4-node-4-fixer
+dag/wf-a1b2c3d4-node-5-fixer
+```
+
+### Sequential Merge for DAG
+
+After all nodes complete, merge branches in dependency order:
+
+```
+1. Merge Node 1 branch → main → verify
+2. Merge Node 2 branch → main → verify
+3. Merge Node 3 branch → main → verify
+4. Merge Node 4 branch → main → verify
+5. Merge Node 5 branch → main → verify
+```
+
+### Cleanup After DAG
+
+```bash
+# Remove all worktrees for this workflow
+git worktree remove .worktrees/dag/wf-a1b2c3d4-node-1-explorer
+git worktree remove .worktrees/dag/wf-a1b2c3d4-node-2-librarian
+git worktree remove .worktrees/dag/wf-a1b2c3d4-node-3-designer
+git worktree remove .worktrees/dag/wf-a1b2c3d4-node-4-fixer
+git worktree remove .worktrees/dag/wf-a1b2c3d4-node-5-fixer
+
+# Prune stale references
+git worktree prune
+```
