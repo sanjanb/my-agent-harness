@@ -192,3 +192,74 @@ grep "wf-a1b2c3d4" .opencode/logs.jsonl | grep -o '"cid":"[^"]*","event":"[^"]*"
 # Most expensive steps
 grep "wf-a1b2c3d4" .opencode/logs.jsonl | grep '"event":"complete"' | sort -t'"cost":' -k2 -rn
 ```
+
+## Session Replay
+
+Session replay captures enough state at each step to reconstruct the full execution path after the fact. This enables post-incident debugging without live tracing overhead.
+
+### What Gets Captured
+
+Each workflow step writes a replay entry to `.opencode/replay/{workflowId}.jsonl`:
+
+```jsonl
+{"step":1,"cid":"wf-a1b2c3d4-step-1-agent-explorer","agent":"explorer","task":"Map auth module","prompt_hash":"e3b0c442...","input_files":["src/auth/"],"output_summary":"Found 3 files, 2 exports","output_files":["src/auth/login.ts"],"model":"opencode-zen/kimi-k2.5-free","tokens":800,"cost":0.02,"duration_ms":2100,"status":"complete","error":null}
+{"step":2,"cid":"wf-a1b2c3d4-step-2-agent-fixer","agent":"fixer","task":"Add error handling","prompt_hash":"a1b2c3d4...","input_files":["src/auth/login.ts"],"output_summary":"Added try-catch to 2 functions","output_files":["src/auth/login.ts"],"model":"deepseek-v4-flash-fast","tokens":2500,"cost":0.05,"duration_ms":5000,"status":"complete","error":null}
+```
+
+| Field          | Type   | Purpose                                      |
+|----------------|--------|----------------------------------------------|
+| `step`           | number | Step number in workflow                      |
+| `cid`            | string | Correlation ID                               |
+| `agent`          | string | Agent type                                   |
+| `task`           | string | Task description                             |
+| `prompt_hash`    | string | SHA-256 of prompt sent to model              |
+| `input_files`    | array  | Files read before execution                  |
+| `output_summary` | string | Brief summary of what was done               |
+| `output_files`   | array  | Files modified/created                       |
+| `model`          | string | Model used                                   |
+| `tokens`         | number | Tokens consumed                              |
+| `cost`           | number | Cost in USD                                  |
+| `duration_ms`    | number | Execution time                               |
+| `status`         | string | complete / error / skipped                   |
+| `error`          | string | Error message (if status=error)              |
+
+### Replay Queries
+
+```bash
+# Full replay for a workflow
+cat .opencode/replay/wf-a1b2c3d4.jsonl | jq .
+
+# Find the step where things went wrong
+cat .opencode/replay/wf-a1b2c3d4.jsonl | jq 'select(.status == "error")'
+
+# See what files each step touched
+cat .opencode/replay/wf-a1b2c3d4.jsonl | jq '{step: .step, agent: .agent, input: .input_files, output: .output_files}'
+
+# Compare two runs of the same workflow
+diff <(cat .opencode/replay/wf-run1.jsonl | jq -c '{step,agent,status,tokens}') \
+     <(cat .opencode/replay/wf-run2.jsonl | jq -c '{step,agent,status,tokens}')
+
+# Total cost and tokens for a run
+cat .opencode/replay/wf-a1b2c3d4.jsonl | jq -s '{total_tokens: (map(.tokens) | add), total_cost: (map(.cost) | add), steps: length}'
+```
+
+### Replay vs Logs
+
+| Aspect         | Logs (logs.jsonl)                    | Replay (replay/*.jsonl)               |
+|----------------|---------------------------------------|---------------------------------------|
+| Purpose        | Real-time monitoring                  | Post-incident debugging               |
+| Granularity    | Events (dispatch/complete/error)      | Full step state (inputs/outputs)      |
+| Overhead       | Minimal (append-only)                 | Moderate (file tracking)              |
+| When to use    | During execution                      | After failure for root cause          |
+| Retention      | Keep all                              | Keep last 10 workflows, prune older   |
+
+### Replay Retention
+
+When replay files exceed 10 workflows:
+1. Delete oldest replay files
+2. Keep replays for workflows that had errors (for post-mortem)
+3. Summarize deleted replays into a single-line stats entry
+
+```jsonl
+{"archived":"wf-a1b2c3d4","date":"2026-07-30","steps":5,"total_tokens":9000,"total_cost":0.20,"status":"complete"}
+```

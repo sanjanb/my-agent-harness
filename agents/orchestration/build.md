@@ -402,6 +402,89 @@ When dispatching multiple agents simultaneously:
    ```
 5. **Clean up** — Remove worktrees after successful merges
 
+## Token Budget Guardrails
+
+Every workflow gets a hard token budget. Prevents runaway costs from loops, retries, or expensive models.
+
+### Budget Allocation
+
+At workflow start, allocate total budget across phases:
+
+```json
+{
+  "workflowId": "wf-a1b2c3d4",
+  "totalBudget": 50000,
+  "totalCostBudget": 1.00,
+  "phases": {
+    "exploration": {"tokens": 5000, "cost": 0.10},
+    "implementation": {"tokens": 25000, "cost": 0.50},
+    "verification": {"tokens": 10000, "cost": 0.20},
+    "reserve": {"tokens": 10000, "cost": 0.20}
+  },
+  "spent": {"tokens": 0, "cost": 0.00}
+}
+```
+
+### Budget Check Process
+
+Before each agent dispatch:
+
+```
+1. Calculate remaining budget: total - spent
+2. Estimate task cost: estimatedTokens from DAG node
+3. If estimated > remaining → HALT workflow, report budget exceeded
+4. If estimated > remaining * 0.5 → WARN (using reserve)
+5. Dispatch with budget context passed to agent
+```
+
+### Budget Enforcement
+
+| Remaining Budget     | Action                                            |
+|----------------------|---------------------------------------------------|
+| > 50%                | Normal dispatch                                    |
+| 25%–50%              | Warn — switch to cheaper models for remaining tasks |
+| 10%–25%              | Critical — only dispatch essential tasks            |
+| < 10%                | Halt — report budget exceeded, escalate to human    |
+
+### Budget Exceeded Response
+
+```json
+{
+  "event": "budget_exceeded",
+  "workflowId": "wf-a1b2c3d4",
+  "totalBudget": 50000,
+  "spent": 48500,
+  "remaining": 1500,
+  "lastStep": "step-4-agent-fixer",
+  "action": "halted",
+  "recommendation": "Increase budget or simplify scope"
+}
+```
+
+### Per-Agent Limits
+
+| Agent Type     | Max Tokens/Task | Max Cost/Task | Reason                    |
+|----------------|-----------------|---------------|---------------------------|
+| explorer       | 2000            | 0.05          | Read-only, fast           |
+| librarian      | 3000            | 0.08          | Web research, variable    |
+| fixer          | 8000            | 0.16          | Implementation, bounded   |
+| designer       | 5000            | 0.10          | Design + implementation   |
+| quality-gate   | 4000            | 0.08          | Verification only         |
+
+Exceeding per-agent limit → task fails with budget error, not silently truncated.
+
+### Budget Reporting
+
+After workflow completes, report budget utilization:
+
+```
+Workflow: wf-a1b2c3d4
+Budget: 50000 tokens / $1.00
+Spent:  32000 tokens / $0.64
+Utilization: 64%
+Most expensive step: step-4 (fixer, 8000 tokens, $0.16)
+```
+
 ## Orchestration Patterns
 
 - **Sequential**: Task B depends on Task A's output
