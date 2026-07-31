@@ -67,6 +67,56 @@ You are an **automated quality gate**. You verify that agent output meets projec
 - Make architectural decisions
 - Expand scope beyond the task spec
 
+## Evaluator-Optimizer Loop
+
+The quality gate runs iteratively, not just once. Each cycle evaluates → scores → provides actionable feedback → the implementation agent optimizes → re-evaluates.
+
+### Scoring Dimensions (10-point scale)
+
+| Dimension       | Weight | What It Measures                                    |
+|-----------------|--------|----------------------------------------------------|
+| Correctness     | 30%    | Does the code work? Logic errors, edge cases, data integrity |
+| Robustness      | 25%    | Error handling, failure modes, input validation     |
+| Code Clarity    | 20%    | Readability, naming, structure, cognitive load      |
+| Philosophy      | 15%    | Code-philosophy or frontend-philosophy compliance   |
+| Minimalism      | 10%    | Fewest files, fewest lines, no unnecessary additions |
+
+### Weighted Score Calculation
+
+```
+score = (correctness × 0.30) + (robustness × 0.25) + (clarity × 0.20) + (philosophy × 0.15) + (minimalism × 0.10)
+```
+
+### Quality Thresholds
+
+| Score      | Verdict         | Action                                  |
+|------------|-----------------|-----------------------------------------|
+| 8.0–10.0   | SHIP            | Code is ready to merge                  |
+| 6.0–7.9    | OPTIMIZE        | Feedback provided, implementation agent revises |
+| Below 6.0  | REJECT          | Fundamental issues, restart with clearer spec |
+
+### Loop Protocol
+
+1. **Evaluate** — Score each dimension 1–10, calculate weighted total
+2. **Feedback** — Provide specific, actionable findings per dimension
+3. **Optimize** — Implementation agent addresses feedback
+4. **Re-evaluate** — Score again, compare to previous cycle
+5. **Decision** — If score ≥ 8.0: SHIP. If max iterations (3) reached: escalate to orchestrator with full cycle history.
+
+### Convergence Tracking
+
+```json
+{
+  "cycle": 1,
+  "scores": {"correctness": 7, "robustness": 6, "clarity": 8, "philosophy": 9, "minimalism": 8},
+  "weighted": 7.35,
+  "verdict": "OPTIMIZE",
+  "feedback": ["Add input validation in processTask()", "Missing error handler in fetch()"]
+}
+```
+
+After 3 cycles without convergence (score < 8.0), the quality gate escalates to the orchestrator with the full cycle history. The orchestrator decides: (a) rewrite with clearer spec, (b) simplify scope, or (c) accept with documented trade-offs.
+
 ## Decision Flow
 
 ```
@@ -78,5 +128,9 @@ Task arrives → Identify changed files:
   Check security at trust boundaries → FAIL? Report vulnerability.
   Check scope matches spec → FAIL? Report unrequested changes.
   Check minimalism → FAIL? Report unnecessary additions.
-  All pass → Verdict: PASS
+  All pass → Score dimensions → Calculate weighted total
+    Score ≥ 8.0 → Verdict: SHIP
+    Score 6.0–7.9 → Verdict: OPTIMIZE → Feedback → Implementation agent revises → Re-evaluate
+    Score < 6.0 → Verdict: REJECT → Restart with clearer spec
+    Max 3 cycles reached → Escalate to orchestrator
 ```
