@@ -1,6 +1,6 @@
 # my-agent-harness
 
-**Personal AI orchestration — 19 agents, 7+ plugins, 4 MCP servers, and a self-annealing philosophy.**
+**Personal AI orchestration — 24 agents, 32 runtime scripts, 7+ plugins, 4 MCP servers, and a self-annealing philosophy.**
 
 A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](https://opencode.ai) (v1.18.4). This is my development harness — a complete agent ecosystem for planning, coding, researching, reviewing, and shipping software with AI that follows real engineering discipline.
 
@@ -280,14 +280,14 @@ graph LR
 
 | Agent | Description |
 |-------|-------------|
-| **build** | Build orchestrator that coordinates implementation through delegation. Parses requests, dispatches to specialist agents, monitors progress, and reports results. |
-| **context-manager** | Context optimization expert — manages context windows, prioritizes information, and handles context overflow. |
-| **error-coordinator** | Error handling and recovery specialist — manages cascading failures, recovery strategies, and system resilience. |
-| **worktree-manager** | Git worktree isolation — creates isolated worktrees per agent task, enables safe parallel execution across branches. |
-| **task-board** | Task board with atomic claiming — tracks task status, prevents duplicate work, enables crash recovery. |
-| **quality-gate** | Automated quality verification — checks compilation, philosophy compliance, tests, style, security, scope, and minimalism before marking tasks done. |
-| **babysit-merge** | CI watcher — monitors PR checks and auto-merges when all pass. Does not fix CI failures. |
-| **observability** | Observability layer — tracks agent metrics, traces workflow execution, surfaces system health and bottlenecks. |
+| **build** | Build orchestrator that coordinates implementation through delegation. Parses requests, dispatches to specialist agents, monitors progress, and reports results. Uses 14 runtime scripts for DAG execution, semantic caching, token budgets, and correlation IDs. |
+| **context-manager** | Context optimization expert — manages context windows, prioritizes information, and handles context overflow. Uses 5 runtime scripts for context loading and state management. |
+| **error-coordinator** | Error handling and recovery specialist — manages cascading failures, recovery strategies, and system resilience. Uses 6 runtime scripts for cost-aware circuit breaking, durable checkpoints, and recovery. |
+| **worktree-manager** | Git worktree isolation — creates isolated worktrees per agent task, enables safe parallel execution across branches. Uses 6 runtime scripts for worktree lifecycle and merge management. |
+| **task-board** | Task board with atomic claiming — tracks task status, prevents duplicate work, enables crash recovery. Uses 5 runtime scripts for atomic claim/release/complete operations. |
+| **quality-gate** | Automated quality verification — checks compilation, philosophy compliance, tests, style, security, scope, and minimalism before marking tasks done. Uses 4 runtime scripts for quality scoring and evaluator-optimizer loops. |
+| **babysit-merge** | CI watcher — monitors PR checks and auto-merges when all pass. Does not fix CI failures. Uses 5 runtime scripts for merge operations and cleanup. |
+| **observability** | Observability layer — tracks agent metrics, traces workflow execution, surfaces system health and bottlenecks. Uses 6 runtime scripts for session replay, correlation tracing, and health checks. |
 
 ## ▸ Plugins
 
@@ -316,15 +316,24 @@ graph LR
 
 ## ▸ Skills
 
+### Custom Skills
+
+| Skill | Description |
+|-------|-------------|
+| **code-philosophy** | The 5 Laws of Elegant Defense — guard clauses, parse don't validate, atomic predictability, fail fast, intentional naming |
+| **frontend-philosophy** | The 5 Pillars of Intentional UI — typography, color, motion, composition, atmosphere |
+| **deepwork** | Multi-phase orchestrator with Oracle review gates, sprint contracts, worktree isolation |
+| **simplify** | Code simplification — reduce complexity without changing behavior |
+| **verification-planning** | Build evidence paths before implementing non-trivial features |
+| **shared-context** | Agent-writable conventions — prevents "agents guess independently" across parallel sessions |
+| **auto-dream** | Memory consolidation — deduplicates and merges conventions between sessions |
+
 ### Managed Skills (oh-my-opencode-slim v2.2.8)
 
 | Skill | Status | Description |
 |-------|--------|-------------|
-| **simplify** | ✓ managed | Simplifies complex code patterns |
 | **codemap** | ✓ managed | Codebase mapping and visualization |
 | **clonedeps** | ✓ managed | Clone dependency management |
-| **deepwork** | ✓ managed | Deep focus / extended context workflows |
-| **verification-planning** | ✓ managed | Verification-driven development planning |
 | **reflect** | ✓ managed | Post-session reflection and learning |
 | **oh-my-opencode-slim** | ✓ managed | Self-managing skill registry |
 | **worktrees** | ✓ managed | Git worktree automation workflows |
@@ -471,13 +480,46 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 
 ```
 .config/opencode/
-├── agents/                    # 19 specialist agent definitions
+├── agents/                    # 24 specialist agent definitions
 │   ├── planning/              #   adr-manager, architecture-analyzer, contract-manager, plan, story-mapper, system-builder
 │   ├── development/           #   coder, typescript-pro, refactoring-specialist, mcp-developer, devops-specialist, test-engineer
 │   ├── research/              #   explore, researcher
 │   ├── content/               #   scribe
 │   ├── review/                #   reviewer
 │   └── orchestration/         #   build, context-manager, error-coordinator, worktree-manager, task-board, quality-gate, babysit-merge, observability
+├── scripts/                   # 32 runtime scripts (bash, MSYS2/Git Bash compatible)
+│   ├── flock.sh               #   Atomic file locking
+│   ├── state.sh               #   JSON state management
+│   ├── correlation.sh         #   Correlation ID generation
+│   ├── log.sh                 #   JSONL logging
+│   ├── workflow-init.sh       #   Workflow initialization
+│   ├── dispatch.sh            #   Agent dispatch with correlation injection
+│   ├── task-board.sh          #   Atomic task claiming via flock
+│   ├── dag-execute.sh         #   DAG validation and execution
+│   ├── checkpoint.sh          #   Durable execution checkpoints
+│   ├── recover.sh             #   Crash recovery
+│   ├── worktree.sh            #   Git worktree lifecycle
+│   ├── merge.sh               #   Branch merging
+│   ├── merge-conflict.sh      #   Conflict detection
+│   ├── cleanup.sh             #   Post-merge cleanup
+│   ├── budget.sh              #   Token budget management
+│   ├── budget-enforce.sh      #   Budget enforcement
+│   ├── cache.sh               #   Semantic caching
+│   ├── cost.sh                #   Cost tracking
+│   ├── cost-report.sh         #   Cost reporting
+│   ├── replay.sh              #   Session replay
+│   ├── trace.sh               #   Correlation tracing
+│   ├── health.sh              #   Health checks
+│   ├── dashboard.sh           #   Human-readable dashboard
+│   ├── quality-gate.sh        #   7-check quality scoring
+│   ├── evaluate.sh            #   Evaluator-optimizer loops
+│   ├── convention.sh          #   Conventions CRUD
+│   ├── auto-dream.sh          #   Memory consolidation
+│   ├── load-context.sh        #   Context loading
+│   ├── stale-task.sh          #   Stale task detection
+│   ├── dry-run.sh             #   DAG dry-run simulation
+│   ├── workflow-complete.sh   #   Workflow completion
+│   └── hooks.sh               #   Lifecycle hooks
 ├── plugins/                   # TypeScript plugins
 │   ├── background-agents.ts   #   Unified delegation system
 │   ├── worktree.ts            #   Git worktree management
@@ -485,6 +527,13 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 │   ├── workspace-plugin.ts    #   Workspace management
 │   └── kdco-primitives/       #   Utility primitives (mutex, shell, timeout, etc.)
 ├── skills/                    # Skill definitions + version manifest (v1.60.1.0)
+│   ├── code-philosophy/       #   5 Laws of Elegant Defense
+│   ├── frontend-philosophy/   #   5 Pillars of Intentional UI
+│   ├── deepwork/              #   Multi-phase orchestrator
+│   ├── simplify/              #   Code simplification
+│   ├── verification-planning/ #   Evidence path building
+│   ├── shared-context/        #   Agent-writable conventions
+│   ├── auto-dream/            #   Memory consolidation
 │   ├── gstack-*/              #   Structured development workflow skills
 │   ├── mp-*/                  #   Community skills
 │   ├── extension/             #   Browser extension (sidepanel, popup, inspector)
@@ -502,6 +551,8 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 ├── oh-my-opencode-slim.json   # Model routing + presets
 ├── ocx.jsonc                  # KDCO registry config
 ├── dcp.jsonc                  # Dynamic Context Pruning config
+├── ORCHESTRATION-ANALYSIS.md  # Industry analysis and gap assessment
+├── RUNTIME-ROADMAP.md         # Runtime implementation roadmap
 └── package.json               # Plugin dependencies
 ```
 
@@ -513,6 +564,30 @@ This harness is governed by two code philosophy mandates that every agent must l
 - **`code-philosophy`** — The 5 Laws of Elegant Defense (for backend/logic work)
 
 These are non-negotiable. The `tools/philosophy.md` directive enforces that agents select, load, and verify against the relevant philosophy before writing a single line of code.
+
+## ▸ Runtime
+
+The harness includes 32 bash scripts in `scripts/` that provide deterministic execution for orchestration operations. Agents read markdown instructions for decision-making and call scripts for reliable mechanical execution.
+
+### Runtime Categories
+
+| Category | Scripts | Purpose |
+|----------|---------|---------|
+| **R1 Core Runtime** | flock, state, correlation, log, workflow-init | Atomic locking, JSON state, correlation IDs, logging |
+| **R2 Execution Engine** | dispatch, task-board, dag-execute, checkpoint, recover | Agent dispatch, atomic claiming, DAG execution, crash recovery |
+| **R3 Isolation & Merge** | worktree, merge, merge-conflict, cleanup | Git worktree lifecycle, branch merging |
+| **R4 Cost & Cache** | budget, budget-enforce, cache, cost, cost-report | Token budgets, semantic caching, cost tracking |
+| **R5 Observability** | replay, trace, health, dashboard | Session replay, correlation tracing, health checks |
+| **R6 Quality & Memory** | quality-gate, evaluate, convention, auto-dream, load-context | Quality scoring, memory consolidation, context loading |
+| **R7 Safety & Polish** | stale-task, dry-run, workflow-complete, hooks | Stale detection, dry-run simulation, lifecycle hooks |
+
+### Key Design Decisions
+
+- **All scripts < 100 lines** — single responsibility, easy to audit
+- **MSYS2/Git Bash compatible** — works on Windows without WSL
+- **jq optional** — graceful fallback when jq is not installed
+- **JSONL format** — append-only, crash-safe, clean git diffs
+- **`set -euo pipefail`** — fail-fast on any error
 
 ## ▸ Built With
 
