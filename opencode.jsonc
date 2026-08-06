@@ -8,7 +8,9 @@
 		"@spoons-and-mirrors/pocket-universe@latest",
 		"opencode-plugin-openspec",
 		"opencode-review",
-		"@dietrichgebert/ponytail"
+		"@dietrichgebert/ponytail",
+		"opencode-warden",
+		"opencode-mem"
 	],
 	"mcp": {
 		"context7": {
