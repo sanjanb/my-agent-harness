@@ -1,4 +1,4 @@
-# Release Notes — v1.1.0
+# Release Notes: v1.1.0
 
 > **Date:** 2026-08-11  
 > **Tag / Version:** `v1.1.0`  

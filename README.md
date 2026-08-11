@@ -1,8 +1,8 @@
 # my-agent-harness
 
-**Personal AI orchestration — 24 agents, 32 runtime scripts, 7+ plugins, 4 MCP servers, and a self-annealing philosophy.**
+**Personal AI orchestration: 24 agents, 32 runtime scripts, 7+ plugins, 4 MCP servers, and a self-annealing philosophy.**
 
-A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](https://opencode.ai) (v1.18.4). This is my development harness — a complete agent ecosystem for planning, coding, researching, reviewing, and shipping software with AI that follows real engineering discipline.
+A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](https://opencode.ai) (v1.18.4). This is my development harness, a complete agent ecosystem for planning, coding, researching, reviewing, and shipping software with AI that follows real engineering discipline.
 
 ## ▸ Table of Contents
 
@@ -24,27 +24,27 @@ The harness operates on a **4-layer architecture** that separates concerns from 
 
 ```mermaid
 graph TD
-    subgraph L1["Layer 1 — Intent (Human Layer)"]
+    subgraph L1["Layer 1: Intent (Human Layer)"]
         INT1["User requests<br/>& commands"]
         INT2["profiles/<br/>Environment configs"]
         INT3["AGENTS.md<br/>Workflow rules"]
     end
 
-    subgraph L2["Layer 2 — Directive (Config Layer)"]
+    subgraph L2["Layer 2: Directive (Config Layer)"]
         DIR1["opencode.jsonc<br/>Plugins, MCPs, permissions"]
         DIR2["oh-my-opencode-slim.json<br/>Model routing + presets"]
         DIR3["Agent definitions<br/>19 agents, 6 categories"]
         DIR4["tools/philosophy.md<br/>Code philosophy mandates"]
     end
 
-    subgraph L3["Layer 3 — Orchestration (AI Layer)"]
+    subgraph L3["Layer 3: Orchestration (AI Layer)"]
         ORCH["OpenCode Orchestrator<br/>Reads directives → routes work"]
         AGENTS["19 Specialist Agents<br/>planning / dev / research /<br/>content / review / orchestration"]
         MODELS["Model Routing<br/>mimo-v2.5-free (orchestrator)<br/>deepseek-v4-flash-free (workers)"]
         SKILLS["Skill Registry<br/>gstack / mp-* / managed"]
     end
 
-    subgraph L4["Layer 4 — Execution (Runtime Layer)"]
+    subgraph L4["Layer 4: Execution (Runtime Layer)"]
         PLUGINS["TypeScript Plugins<br/>background-agents / worktree<br/>notify / kdco-primitives"]
         MCPS["MCP Servers<br/>context7 / composio / exa / gh_grep"]
         TOOLS["External Tools<br/>npm / git / shell"]
@@ -257,7 +257,7 @@ graph LR
     style EXEC fill:#0f3460,stroke:#53d769,color:#fff
 ```
 
-**Key principle:** LLMs (Layer 3) never directly execute business logic. They route and plan — Layer 4 carries out the actual work deterministically.
+**Key principle:** LLMs (Layer 3) never directly execute business logic. They route and plan; Layer 4 carries out the actual work deterministically.
 
 ## ▸ Agent Roster
 
@@ -267,36 +267,36 @@ graph LR
 
 | Agent | Description |
 |-------|-------------|
-| **adr-manager** | Creates and maintains Architecture Decision Records (ADRs) — lightweight docs capturing important architectural decisions with context and consequences. |
-| **architecture-analyzer** | Domain-Driven Design specialist — bounded contexts, aggregates, domain events, context mapping, and strategic design artifacts. |
-| **contract-manager** | API contract-first design — OpenAPI 3.0+ specs, consumer-driven contracts, request/response schemas, and API governance. |
+| **adr-manager** | Creates and maintains Architecture Decision Records (ADRs): lightweight docs capturing important architectural decisions with context and consequences. |
+| **architecture-analyzer** | Domain-Driven Design specialist: bounded contexts, aggregates, domain events, context mapping, and strategic design artifacts. |
+| **contract-manager** | API contract-first design: OpenAPI 3.0+ specs, consumer-driven contracts, request/response schemas, and API governance. |
 | **plan** | Strategic planning orchestrator. Breaks requirements into tasks, delegates execution to specialist agents, tracks results, and adapts. |
-| **story-mapper** | User story mapping — identifies personas, maps user journeys, identifies vertical slices, and decomposes work into epics and stories. |
-| **system-builder** | Generates complete `.opencode` folder architectures from project requirements — discovers project structure, interviews for gaps, and scaffolds. |
+| **story-mapper** | User story mapping: identifies personas, maps user journeys, identifies vertical slices, and decomposes work into epics and stories. |
+| **system-builder** | Generates complete `.opencode` folder architectures from project requirements: discovers project structure, interviews for gaps, and scaffolds. |
 
 ### Development
 
 | Agent | Description |
 |-------|-------------|
 | **coder** | Technical implementation specialist for writing and modifying code. Follows code philosophy mandates before every implementation. |
-| **typescript-pro** | TypeScript specialist — type-safe code, generics, utility types, and TS ecosystem patterns. |
-| **refactoring-specialist** | Code refactoring expert — improves code structure, eliminates smells, and applies design patterns safely. |
-| **mcp-developer** | MCP protocol specialist — builds servers/clients, configures integrations, and debugs MCP connections. |
+| **typescript-pro** | TypeScript specialist: type-safe code, generics, utility types, and TS ecosystem patterns. |
+| **refactoring-specialist** | Code refactoring expert: improves code structure, eliminates smells, and applies design patterns safely. |
+| **mcp-developer** | MCP protocol specialist: builds servers/clients, configures integrations, and debugs MCP connections. |
 | **devops-specialist** | CI/CD pipelines, Docker, Kubernetes, Terraform, infrastructure-as-code, deployment automation, and cloud architecture. |
-| **test-engineer** | Test strategy and authoring — unit, integration, and e2e tests (Jest, Vitest, pytest, Playwright, Cypress). TDD and coverage analysis. |
+| **test-engineer** | Test strategy and authoring: unit, integration, and e2e tests (Jest, Vitest, pytest, Playwright, Cypress). TDD and coverage analysis. |
 
 ### Research
 
 | Agent | Description |
 |-------|-------------|
-| **explore** | Codebase exploration specialist — analyzes project structure, traces code paths, returns compressed context for other agents. |
-| **researcher** | External knowledge architect — gathers implementation-ready research with full citations and reusable code snippets. |
+| **explore** | Codebase exploration specialist: analyzes project structure, traces code paths, returns compressed context for other agents. |
+| **researcher** | External knowledge architect: gathers implementation-ready research with full citations and reusable code snippets. |
 
 ### Content
 
 | Agent | Description |
 |-------|-------------|
-| **scribe** | Human-facing content specialist — documentation, commit messages, PR descriptions, changelogs, and release notes. |
+| **scribe** | Human-facing content specialist: documentation, commit messages, PR descriptions, changelogs, and release notes. |
 
 ### Review
 
@@ -309,13 +309,13 @@ graph LR
 | Agent | Description |
 |-------|-------------|
 | **build** | Build orchestrator that coordinates implementation through delegation. Parses requests, dispatches to specialist agents, monitors progress, and reports results. Uses 14 runtime scripts for DAG execution, semantic caching, token budgets, and correlation IDs. |
-| **context-manager** | Context optimization expert — manages context windows, prioritizes information, and handles context overflow. Uses 5 runtime scripts for context loading and state management. |
-| **error-coordinator** | Error handling and recovery specialist — manages cascading failures, recovery strategies, and system resilience. Uses 6 runtime scripts for cost-aware circuit breaking, durable checkpoints, and recovery. |
-| **worktree-manager** | Git worktree isolation — creates isolated worktrees per agent task, enables safe parallel execution across branches. Uses 6 runtime scripts for worktree lifecycle and merge management. |
-| **task-board** | Task board with atomic claiming — tracks task status, prevents duplicate work, enables crash recovery. Uses 5 runtime scripts for atomic claim/release/complete operations. |
-| **quality-gate** | Automated quality verification — checks compilation, philosophy compliance, tests, style, security, scope, and minimalism before marking tasks done. Uses 4 runtime scripts for quality scoring and evaluator-optimizer loops. |
-| **babysit-merge** | CI watcher — monitors PR checks and auto-merges when all pass. Does not fix CI failures. Uses 5 runtime scripts for merge operations and cleanup. |
-| **observability** | Observability layer — tracks agent metrics, traces workflow execution, surfaces system health and bottlenecks. Uses 6 runtime scripts for session replay, correlation tracing, and health checks. |
+| **context-manager** | Context optimization expert: manages context windows, prioritizes information, and handles context overflow. Uses 5 runtime scripts for context loading and state management. |
+| **error-coordinator** | Error handling and recovery specialist: manages cascading failures, recovery strategies, and system resilience. Uses 6 runtime scripts for cost-aware circuit breaking, durable checkpoints, and recovery. |
+| **worktree-manager** | Git worktree isolation: creates isolated worktrees per agent task, enables safe parallel execution across branches. Uses 6 runtime scripts for worktree lifecycle and merge management. |
+| **task-board** | Task board with atomic claiming: tracks task status, prevents duplicate work, enables crash recovery. Uses 5 runtime scripts for atomic claim/release/complete operations. |
+| **quality-gate** | Automated quality verification: checks compilation, philosophy compliance, tests, style, security, scope, and minimalism before marking tasks done. Uses 4 runtime scripts for quality scoring and evaluator-optimizer loops. |
+| **babysit-merge** | CI watcher: monitors PR checks and auto-merges when all pass. Does not fix CI failures. Uses 5 runtime scripts for merge operations and cleanup. |
+| **observability** | Observability layer: tracks agent metrics, traces workflow execution, surfaces system health and bottlenecks. Uses 6 runtime scripts for session replay, correlation tracing, and health checks. |
 
 ## ▸ Plugins
 
@@ -323,24 +323,24 @@ graph LR
 
 | Plugin | Description |
 |--------|-------------|
-| **background-agents** | Unified, async-first delegation system. Replaces native `task` tool with persistent agent outputs stored to disk — orchestrator receives only references. Based on [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode). |
-| **worktree** | Worktree management — creates, switches, and manages Git worktrees for parallel development streams. |
-| **notify** | Desktop and terminal notifications for agent events — status updates, completion alerts, and multiplexer-aware routing. |
-| **kdco-primitives** | Primitive utility library — timeouts, mutexes, shell execution, terminal detection, temporary file management, CMUX multiplexer integration, and logging. |
+| **background-agents** | Unified, async-first delegation system. Replaces native `task` tool with persistent agent outputs stored to disk; orchestrator receives only references. Based on [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode). |
+| **worktree** | Worktree management: creates, switches, and manages Git worktrees for parallel development streams. |
+| **notify** | Desktop and terminal notifications for agent events: status updates, completion alerts, and multiplexer-aware routing. |
+| **kdco-primitives** | Primitive utility library: timeouts, mutexes, shell execution, terminal detection, temporary file management, CMUX multiplexer integration, and logging. |
 | **workspace-plugin** | Workspace configuration and management. |
 
 ### Loaded via opencode.jsonc
 
 | Plugin | Version / Ref |
 |--------|---------------|
-| `@tarquinen/opencode-dcp` | v3.1.3 — Dynamic Context Pruning |
-| `@franlol/opencode-md-table-formatter` | v0.0.6 — Markdown table formatting |
-| `oh-my-opencode-slim` | latest — Skill registry + model routing |
-| `envsitter-guard` | — Environment variable guardrails |
-| `@spoons-and-mirrors/pocket-universe` | latest — Knowledge base integration |
-| `opencode-plugin-openspec` | — OpenSpec specification support |
-| `opencode-review` | — Review workflow automation |
-| `@dietrichgebert/ponytail` | — Ponytail mode (lazy dev philosophy) |
+| `@tarquinen/opencode-dcp` | v3.1.3 (Dynamic Context Pruning) |
+| `@franlol/opencode-md-table-formatter` | v0.0.6 (Markdown table formatting) |
+| `oh-my-opencode-slim` | latest (Skill registry and model routing) |
+| `envsitter-guard` | Environment variable guardrails |
+| `@spoons-and-mirrors/pocket-universe` | latest (Knowledge base integration) |
+| `opencode-plugin-openspec` | OpenSpec specification support |
+| `opencode-review` | Review workflow automation |
+| `@dietrichgebert/ponytail` | Ponytail mode (lazy dev philosophy) |
 
 ## ▸ Skills
 
@@ -348,13 +348,13 @@ graph LR
 
 | Skill | Description |
 |-------|-------------|
-| **code-philosophy** | The 5 Laws of Elegant Defense — guard clauses, parse don't validate, atomic predictability, fail fast, intentional naming |
-| **frontend-philosophy** | The 5 Pillars of Intentional UI — typography, color, motion, composition, atmosphere |
+| **code-philosophy** | The 5 Laws of Elegant Defense: guard clauses, parse don't validate, atomic predictability, fail fast, intentional naming |
+| **frontend-philosophy** | The 5 Pillars of Intentional UI: typography, color, motion, composition, atmosphere |
 | **deepwork** | Multi-phase orchestrator with Oracle review gates, sprint contracts, worktree isolation |
-| **simplify** | Code simplification — reduce complexity without changing behavior |
+| **simplify** | Code simplification: reduce complexity without changing behavior |
 | **verification-planning** | Build evidence paths before implementing non-trivial features |
-| **shared-context** | Agent-writable conventions — prevents "agents guess independently" across parallel sessions |
-| **auto-dream** | Memory consolidation — deduplicates and merges conventions between sessions |
+| **shared-context** | Agent-writable conventions: prevents "agents guess independently" across parallel sessions |
+| **auto-dream** | Memory consolidation: deduplicates and merges conventions between sessions |
 
 ### Managed Skills (oh-my-opencode-slim v2.2.8)
 
@@ -380,9 +380,9 @@ The `oh-my-opencode-slim.json` preset configures 6 specialized model roles with 
 
 | Role | Model | Variant | Capabilities |
 |------|-------|---------|--------------|
-| **Orchestrator** | `mimo-v2.5-free` | high | All skills / All MCPs — full executive agent |
-| **Oracle** | `deepseek-v4-flash-free` | high | `simplify` + `code-review` — deep analytical work |
-| **Librarian** | `deepseek-v4-flash-free` | medium | Web search / context7 / gh_grep — information retrieval |
+| **Orchestrator** | `mimo-v2.5-free` | high | All skills / All MCPs: full executive agent |
+| **Oracle** | `deepseek-v4-flash-free` | high | `simplify` + `code-review`: deep analytical work |
+| **Librarian** | `deepseek-v4-flash-free` | medium | Web search / context7 / gh_grep: information retrieval |
 | **Explorer** | `deepseek-v4-flash-free` | low | Lightweight exploration tasks |
 | **Designer** | `deepseek-v4-flash-free` | medium | UI/UX design and review workflows |
 | **Fixer** | `deepseek-v4-flash-free` | high | Targeted bug fixing and patching |
@@ -448,24 +448,24 @@ The harness incorporates a 4-tier memory architecture to preserve context and le
 
 ```mermaid
 graph TD
-    subgraph M1["Tier 1 — Vector Memory (opencode-mem)"]
+    subgraph M1["Tier 1: Vector Memory (opencode-mem)"]
         V1["Local ONNX Embeddings<br/>Xenova/nomic-embed-text-v1"]
         V2["Web Dashboard UI<br/>http://127.0.0.1:4747"]
         V3["Auto-deduplication & 30-day retention"]
     end
 
-    subgraph M2["Tier 2 — Inter-Session Consolidation (AutoDream)"]
+    subgraph M2["Tier 2: Inter-Session Consolidation (AutoDream)"]
         A1["scripts/auto-dream.sh"]
         A2["Parses logs & step replays"]
         A3["Extracts Patterns, Anti-Patterns, Preferences"]
     end
 
-    subgraph M3["Tier 3 — Agent Conventions (conventions.jsonl)"]
+    subgraph M3["Tier 3: Agent Conventions (conventions.jsonl)"]
         C1["scripts/convention.sh & load-context.sh"]
         C2["Agent-writable project norms"]
     end
 
-    subgraph M4["Tier 4 — In-Session Context Manager"]
+    subgraph M4["Tier 4: In-Session Context Manager"]
         S1["orchestration-context-manager"]
         S2["Window compression & intent preservation"]
     end
@@ -504,7 +504,7 @@ opencode run review     # test a review command
 
 | File | Purpose |
 |------|---------|
-| `opencode.jsonc` | Main configuration — plugins, MCP servers, permission model, agent overrides, code philosophy instructions |
+| `opencode.jsonc` | Main configuration: plugins, MCP servers, permission model, agent overrides, code philosophy instructions |
 | `oh-my-opencode-slim.json` | Model routing presets, multiplexer config, agent orchestrator prompts, disabled agents |
 | `ocx.jsonc` | OCX registry pointing to `registry.kdco.dev` for skill discovery |
 | `dcp.jsonc` | Dynamic Context Pruning schema config |
@@ -518,9 +518,9 @@ The `profiles/default/` directory contains environment-specific overrides for `o
 
 The harness uses a **deny-by-default** permission model with per-agent overrides:
 
-- **Top-level denies**: `context7_*`, `exa_*`, `gh_grep_*`, `kagi_*`, `webfetch`, `worktree_*` — agents must be explicitly allowed
-- **plan agent** (mode: `primary`): Edit/write/bash denied, delegation read/list allowed, worktree management allowed — purpose-built as a read-only orchestrator
-- **scribe agent**: Bash denied, edit/write/read/glob allowed — content creation without shell access
+- **Top-level denies**: `context7_*`, `exa_*`, `gh_grep_*`, `kagi_*`, `webfetch`, `worktree_*`: agents must be explicitly allowed
+- **plan agent** (mode: `primary`): Edit/write/bash denied, delegation read/list allowed, worktree management allowed: purpose-built as a read-only orchestrator
+- **scribe agent**: Bash denied, edit/write/read/glob allowed: content creation without shell access
 
 ## ▸ Project Structure
 
@@ -606,8 +606,8 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 
 This harness is governed by two code philosophy mandates that every agent must load before implementation:
 
-- **`frontend-philosophy`** — The 5 Pillars of Intentional UI (for UI/frontend work)
-- **`code-philosophy`** — The 5 Laws of Elegant Defense (for backend/logic work)
+- **`frontend-philosophy`**: The 5 Pillars of Intentional UI (for UI/frontend work)
+- **`code-philosophy`**: The 5 Laws of Elegant Defense (for backend/logic work)
 
 These are non-negotiable. The `tools/philosophy.md` directive enforces that agents select, load, and verify against the relevant philosophy before writing a single line of code.
 
@@ -629,27 +629,27 @@ The harness includes 32 bash scripts in `scripts/` that provide deterministic ex
 
 ### Key Design Decisions
 
-- **All scripts < 100 lines** — single responsibility, easy to audit
-- **MSYS2/Git Bash compatible** — works on Windows without WSL
-- **jq optional** — graceful fallback when jq is not installed
-- **JSONL format** — append-only, crash-safe, clean git diffs
-- **`set -euo pipefail`** — fail-fast on any error
+- **All scripts < 100 lines**: single responsibility, easy to audit
+- **MSYS2/Git Bash compatible**: works on Windows without WSL
+- **jq optional**: graceful fallback when jq is not installed
+- **JSONL format**: append-only, crash-safe, clean git diffs
+- **`set -euo pipefail`**: fail-fast on any error
 
 ## ▸ Built With
 
-- [OpenCode](https://opencode.ai) — AI-native development platform
-- [`@opencode-ai/plugin`](https://www.npmjs.com/package/@opencode-ai/plugin) v1.18.4 — Plugin SDK
-- [oh-my-opencode-slim](https://github.com/code-yeongyu/oh-my-opencode-slim) — Skill registry and model routing
-- [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode) — Background agent delegation system (MIT)
-- [Context7](https://context7.com) — Documentation MCP server
-- [Exa](https://exa.ai) — Web search MCP server
-- [grep.app](https://grep.app) — GitHub code search MCP server
-- [Composio](https://composio.dev) — Integration platform
-- [KDCO Registry](https://registry.kdco.dev) — Skill package registry
-- [Ponytail](https://github.com/dietrichgebert/ponytail) — Lazy development philosophy plugin
-- [unique-names-generator](https://github.com/andreasonny83/unique-names-generator) — Agent naming
-- [zod](https://zod.dev) — Schema validation
-- [node-notifier](https://github.com/mikaelbr/node-notifier) — Desktop notifications
+- [OpenCode](https://opencode.ai): AI-native development platform
+- [`@opencode-ai/plugin`](https://www.npmjs.com/package/@opencode-ai/plugin) v1.18.4: Plugin SDK
+- [oh-my-opencode-slim](https://github.com/code-yeongyu/oh-my-opencode-slim): Skill registry and model routing
+- [oh-my-opencode](https://github.com/code-yeongyu/oh-my-opencode): Background agent delegation system (MIT)
+- [Context7](https://context7.com): Documentation MCP server
+- [Exa](https://exa.ai): Web search MCP server
+- [grep.app](https://grep.app): GitHub code search MCP server
+- [Composio](https://composio.dev): Integration platform
+- [KDCO Registry](https://registry.kdco.dev): Skill package registry
+- [Ponytail](https://github.com/dietrichgebert/ponytail): Lazy development philosophy plugin
+- [unique-names-generator](https://github.com/andreasonny83/unique-names-generator): Agent naming
+- [zod](https://zod.dev): Schema validation
+- [node-notifier](https://github.com/mikaelbr/node-notifier): Desktop notifications
 
 ## ▸ License
 
@@ -664,3 +664,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <p align="center">
   <sub>Built by an agent harness that reviews its own code.</sub>
 </p>
+
