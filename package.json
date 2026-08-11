@@ -11,7 +11,7 @@
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
-    "setup": "node dist/cli.js",
+    "setup": "npm run build && node dist/cli.js",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [

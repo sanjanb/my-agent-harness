@@ -37,12 +37,12 @@
 		}
 	},
 	"permission": {
-		"context7_*": "deny",
-		"exa_*": "deny",
-		"gh_grep_*": "deny",
+		"context7_*": "ask",
+		"exa_*": "ask",
+		"gh_grep_*": "ask",
 		"kagi_*": "deny",
-		"webfetch": "deny",
-		"worktree_*": "deny"
+		"webfetch": "ask",
+		"worktree_*": "allow"
 	},
 	"agent": {
 		"scribe": {

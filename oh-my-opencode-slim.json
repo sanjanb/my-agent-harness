@@ -59,6 +59,33 @@
         "variant": "low",
         "skills": [],
         "mcps": []
+      },
+      "critic-a": {
+        "model": "opencode/nemotron-3-ultra-free",
+        "variant": "high",
+        "skills": [
+          "critique",
+          "code-philosophy"
+        ],
+        "mcps": []
+      },
+      "critic-b": {
+        "model": "opencode/deepseek-v4-flash-free",
+        "variant": "medium",
+        "skills": [
+          "critique",
+          "code-philosophy"
+        ],
+        "mcps": []
+      },
+      "critic-c": {
+        "model": "opencode/mimo-v2.5-free",
+        "variant": "medium",
+        "skills": [
+          "critique",
+          "code-philosophy"
+        ],
+        "mcps": []
       }
     }
   },

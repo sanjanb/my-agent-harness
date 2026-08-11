@@ -22,7 +22,9 @@ const ROOT_DIR = resolve(__dirname, '..');
 const CONFIG_DIR = join(ROOT_DIR, 'config');
 const HOME_DIR = process.env.HOME || process.env.USERPROFILE || '';
 const INSTALL_DIR = join(HOME_DIR, '.config', 'opencode');
-const REPO_DIR = join(HOME_DIR, 'my-agent-harness');
+const REPO_DIR = existsSync(join(process.cwd(), 'package.json')) 
+  ? process.cwd() 
+  : (existsSync(join(ROOT_DIR, 'package.json')) ? ROOT_DIR : join(HOME_DIR, 'my-agent-harness'));
 
 interface InstallOptions {
   repoDir?: string;
@@ -85,8 +87,11 @@ async function cloneOrUpdateRepo(repoDir: string): Promise<void> {
   
   if (existsSync(join(repoDir, '.git'))) {
     spinner.text = 'Updating existing repository...';
-    await execa('git', ['pull', 'origin', 'main'], { cwd: repoDir });
-    spinner.succeed('Repository updated');
+    await execa('git', ['pull', 'origin', 'main'], { cwd: repoDir }).catch(() => {
+      // If pull fails (e.g. no remote or detached HEAD), log warning without crashing
+      spinner.warn('Git pull skipped (working from local state)');
+    });
+    spinner.succeed('Repository ready');
   } else {
     spinner.text = 'Cloning repository...';
     // For local development, copy from current directory
@@ -149,8 +154,7 @@ async function linkConfig(repoDir: string, installDir: string): Promise<void> {
     
     // Create symlink (or junction on Windows)
     if (process.platform === 'win32') {
-      // On Windows, use junction (directory symlink)
-      await execa('cmd', ['/c', 'mklink', '/D', installDir, repoDir]);
+      symlinkSync(repoDir, installDir, 'junction');
       spinner.succeed(`Config linked to ${installDir} (Windows junction)`);
     } else {
       symlinkSync(repoDir, installDir, 'dir');
@@ -200,24 +204,16 @@ async function verifyInstallation(): Promise<void> {
 }
 
 async function promptForApiKeys(repoDir: string): Promise<void> {
-  const configPath = join(repoDir, 'opencode.jsonc');
-  if (!existsSync(configPath)) return;
+  const envPath = join(repoDir, '.env');
+  let existingEnv = existsSync(envPath) ? readFileSync(envPath, 'utf-8') : '';
   
-  const configContent = readFileSync(configPath, 'utf-8');
-  const needsKeys = configContent.includes('${CONTEXT7_API_KEY}') || 
-                    configContent.includes('${OPENAI_API_KEY}') ||
-                    configContent.includes('${ANTHROPIC_API_KEY}');
-  
-  if (!needsKeys) return;
-  
-  console.log(chalk.yellow('\n⚠ Configuration requires API keys:'));
+  console.log(chalk.yellow('\n⚠ Configure API keys for external services (optional):'));
   
   const response = await prompts([
     {
       type: 'text',
       name: 'context7',
-      message: 'Context7 API key (get from https://context7.com):',
-      validate: v => v.length > 0 || 'Required for library docs'
+      message: 'Context7 API key (get from https://context7.com):'
     },
     {
       type: 'text',
@@ -231,12 +227,20 @@ async function promptForApiKeys(repoDir: string): Promise<void> {
     }
   ]);
   
-  if (response.context7) {
-    let updated = configContent.replace('${CONTEXT7_API_KEY}', response.context7);
-    if (response.openai) updated = updated.replace('${OPENAI_API_KEY}', response.openai);
-    if (response.anthropic) updated = updated.replace('${ANTHROPIC_API_KEY}', response.anthropic);
-    writeFileSync(configPath, updated);
-    console.log(chalk.green('✓ API keys saved to opencode.jsonc'));
+  let envAppends = '';
+  if (response.context7 && !existingEnv.includes('CONTEXT7_API_KEY')) {
+    envAppends += `CONTEXT7_API_KEY=${response.context7}\n`;
+  }
+  if (response.openai && !existingEnv.includes('OPENAI_API_KEY')) {
+    envAppends += `OPENAI_API_KEY=${response.openai}\n`;
+  }
+  if (response.anthropic && !existingEnv.includes('ANTHROPIC_API_KEY')) {
+    envAppends += `ANTHROPIC_API_KEY=${response.anthropic}\n`;
+  }
+
+  if (envAppends) {
+    writeFileSync(envPath, existingEnv + (existingEnv.endsWith('\n') || !existingEnv ? '' : '\n') + envAppends);
+    console.log(chalk.green('✓ API keys securely appended to gitignored .env file'));
   }
 }
 
