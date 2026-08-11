@@ -1,4 +1,4 @@
-# Release Notes: v1.1.0
+# Release Notes v1.1.0
 
 > **Date:** 2026-08-11  
 > **Tag / Version:** `v1.1.0`  
@@ -6,7 +6,7 @@
 
 ---
 
-## 🚀 Key Improvements & Highlights
+## Key Improvements & Highlights
 
 ### 1. Portable Setup CLI (`src/cli.ts` & `package.json`)
 - **Auto-Directory Resolution**: Running `npm run setup` or `npx my-agent-harness` now intelligently detects the local working directory (`process.cwd()`) on any system, removing reliance on fixed git URLs or hardcoded path destinations.
