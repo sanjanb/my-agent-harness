@@ -407,70 +407,88 @@ The **tmux multiplexer** runs with a `main-vertical` layout at 60% main pane siz
 - npm
 - git
 
-### Installation via npx (Recommended)
-
-```bash
-npx my-agent-harness@latest
-```
-
-That's it. The installer will:
-
-1. Verify prerequisites (OpenCode, Node.js, npm, git)
-2. Clone the repository to `~/my-agent-harness`
-3. Install plugin dependencies
-4. Copy configuration templates
-5. Symlink `~/.config/opencode` → the repository
-6. Prompt for API keys (Context7, OpenAI, Anthropic)
-7. Verify agents and skills loaded
-
-**Options:**
-
-| Flag | Effect |
-|------|--------|
-| `--force` | Overwrite existing `~/.config/opencode` (backs up first) |
-| `--skip-deps` | Skip `npm install` (if deps already installed) |
-| `--skip-verify` | Skip post-install verification |
-| `-r, --repo-dir <path>` | Custom clone location (default: `~/my-agent-harness`) |
-| `-i, --install-dir <path>` | Custom install target (default: `~/.config/opencode`) |
-
-**Short alias:** `mah` works as a shorthand for `my-agent-harness`.
-
-### Manual Installation
+### Installation from Cloned Repository (Recommended)
 
 ```bash
 git clone https://github.com/sanjanb/my-agent-harness.git
 cd my-agent-harness
+
+# Install dependencies & compile CLI
 npm install
-npm link    # makes 'my-agent-harness' and 'mah' available globally
 
-# Copy config templates
-cp config/opencode.jsonc.template opencode.jsonc
-cp config/oh-my-opencode-slim.json.template oh-my-opencode-slim.json
-cp config/ocx.jsonc.template ocx.jsonc
-cp config/dcp.jsonc.template dcp.jsonc
-
-# Symlink to OpenCode config directory
-# macOS/Linux:
-ln -s "$(pwd)" ~/.config/opencode
-# Windows (PowerShell as admin):
-# New-Item -ItemType Junction -Path "$env:USERPROFILE\.config\opencode" -Target "$(pwd)"
+# Run installer to link config to OpenCode
+npm run setup
 ```
+
+The installer CLI will automatically:
+
+1. Verify prerequisites (OpenCode CLI, Node.js 18+, npm, git)
+2. Auto-detect the local repository directory (`process.cwd()`)
+3. Install dependencies and build TypeScript targets
+4. Copy configuration templates (`config/*.template`)
+5. Create a non-admin cross-platform symlink/junction from `~/.config/opencode` to the repository
+6. Safely prompt for API keys (Context7, OpenAI, Anthropic) and write them to the local gitignored `.env` file
+7. Verify loaded agents and skill configurations
+
+**CLI Options:**
+
+| Flag | Effect |
+|------|--------|
+| `--force` | Overwrite existing `~/.config/opencode` (backs up first) |
+| `--skip-deps` | Skip `npm install` (if dependencies are pre-installed) |
+| `--skip-verify` | Skip post-install verification check |
+| `-r, --repo-dir <path>` | Custom target directory (default: current working directory or `~/my-agent-harness`) |
+| `-i, --install-dir <path>` | Custom OpenCode config install path (default: `~/.config/opencode`) |
+
+**Short alias:** `mah` works as a shorthand CLI command (`npm link`).
+
+## ▸ Memory System
+
+The harness incorporates a 4-tier memory architecture to preserve context and learn across sessions:
+
+```mermaid
+graph TD
+    subgraph M1["Tier 1 — Vector Memory (opencode-mem)"]
+        V1["Local ONNX Embeddings<br/>Xenova/nomic-embed-text-v1"]
+        V2["Web Dashboard UI<br/>http://127.0.0.1:4747"]
+        V3["Auto-deduplication & 30-day retention"]
+    end
+
+    subgraph M2["Tier 2 — Inter-Session Consolidation (AutoDream)"]
+        A1["scripts/auto-dream.sh"]
+        A2["Parses logs & step replays"]
+        A3["Extracts Patterns, Anti-Patterns, Preferences"]
+    end
+
+    subgraph M3["Tier 3 — Agent Conventions (conventions.jsonl)"]
+        C1["scripts/convention.sh & load-context.sh"]
+        C2["Agent-writable project norms"]
+    end
+
+    subgraph M4["Tier 4 — In-Session Context Manager"]
+        S1["orchestration-context-manager"]
+        S2["Window compression & intent preservation"]
+    end
+
+    M1 --> M2 --> M3 --> M4
+```
+
+| Memory Tier | Mechanism | Storage Location |
+|-------------|-----------|------------------|
+| **Vector DB (`opencode-mem`)** | Semantic similarity search via ONNX embeddings | `~/.opencode-mem/data` |
+| **`AutoDream`** | REM-style post-workflow consolidation | `.opencode/workflows/*/memory.json` |
+| **Shared Conventions** | Dynamic agent-writable rules & patterns | `.opencode/conventions.jsonl` |
+| **Context Manager** | Boundary-aware context window compression | Active LLM session |
 
 ### Configuration
 
-After installation, edit the config files in the repository root:
+After installation, API keys are stored in the gitignored `.env` file:
 
-| File | Required | Purpose |
-|------|----------|---------|
-| `opencode.jsonc` | Yes | API keys (Context7, etc.), plugins, MCPs, permissions |
-| `oh-my-opencode-slim.json` | Optional | Model routing, multiplexer layout |
-| `ocx.jsonc` | Optional | Skill registry configuration |
-| `dcp.jsonc` | Optional | Dynamic context pruning rules |
-
-**Required API keys** (add to `opencode.jsonc` or set as environment variables):
-- `CONTEXT7_API_KEY` — Get at [context7.com](https://context7.com)
-- `EXA_API_KEY` — Get at [exa.ai](https://exa.ai) (optional)
-- `COMPOSIO_API_KEY` — Get at [composio.dev](https://composio.dev) (optional)
+```env
+CONTEXT7_API_KEY=your_key_here
+OPENAI_API_KEY=your_key_here
+ANTHROPIC_API_KEY=your_key_here
+```
 
 ### Verify It Works
 

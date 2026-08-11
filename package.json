@@ -1,6 +1,6 @@
 {
   "name": "my-agent-harness",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "AI Orchestration Harness for OpenCode - 4-layer architecture with 19 custom agents, 4 plugins, and gstack skills",
   "type": "module",
   "main": "dist/index.js",
