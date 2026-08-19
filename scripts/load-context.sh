@@ -3,12 +3,12 @@
 # Usage: ./load-context.sh <agent_type> [workflow_id]
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 HAS_JQ=false; command -v jq &>/dev/null && HAS_JQ=true
 usage() { echo "Usage: $0 <agent_type> [workflow_id]" >&2; exit 1; }
 [[ $# -ge 1 ]] || usage
 agent_type="$1"; workflow_id="${2:-}"
-
-escape_json() { local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/\\n}"; s="${s//$'\t'/\\t}"; echo "$s"; }
 
 echo "=== Context for agent: $agent_type ==="
 echo ""

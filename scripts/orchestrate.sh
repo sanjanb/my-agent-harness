@@ -21,9 +21,10 @@ Options:
 
 DAG format (JSON):
   {"nodes": [
-    {"id": "task1", "depends_on": [], "agent": "explorer", "prompt": "..."},
-    {"id": "task2", "depends_on": ["task1"], "agent": "fixer", "prompt": "..."}
+    {"id": "task1", "depends_on": [], "agent": "explorer", "prompt": "...", "estimated_tokens": 2000},
+    {"id": "task2", "depends_on": ["task1"], "agent": "fixer", "prompt": "...", "estimated_tokens": 5000}
   ]}
+  estimated_tokens is optional; defaults to 1000 if not specified.
 EOF
   exit 1
 }
@@ -188,7 +189,8 @@ for task_id in "${ALL_TASKS[@]}"; do
   "$SCRIPT_DIR/task-board.sh" complete "$wf_id" "$task_id" "$result" >/dev/null
 
   # Record budget spend (estimated)
-  "$SCRIPT_DIR/budget.sh" spend "$wf_id" "$agent" 1000 >/dev/null 2>&1 || true
+  est_tokens=$(jq -r --arg id "$task_id" '.nodes[] | select(.id == $id) | .estimated_tokens // 1000' "$DAG_FILE")
+  "$SCRIPT_DIR/budget.sh" spend "$wf_id" "$agent" "$est_tokens" >/dev/null 2>&1 || true
 
   # Update completed list
   completed="${completed:+${completed},}${task_id}"

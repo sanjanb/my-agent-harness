@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# flock.sh — Atomic file lock via PID-based lockfile
+# flock.sh — Atomic directory-based lock (mkdir is atomic on POSIX/NTFS)
 # Usage: ./flock.sh <lockfile> <command> [args...]
 set -euo pipefail
 
@@ -20,31 +20,32 @@ command="$1"; shift
 mkdir -p "$(dirname "$lockfile")" 2>/dev/null || true
 
 cleanup() {
-  rm -f "$lockfile"
+  rm -rf "$lockfile"
 }
 trap cleanup EXIT
 
-# Check existing lock
-if [[ -f "$lockfile" ]]; then
-  locked_pid=$(head -1 "$lockfile" 2>/dev/null || echo "")
-  if [[ -n "$locked_pid" ]]; then
-    # Check if process still alive (works on MSYS2/Git Bash)
-    if kill -0 "$locked_pid" 2>/dev/null; then
-      # Check staleness
-      lock_time=$(sed -n '2p' "$lockfile" 2>/dev/null || echo "0")
-      now=$(date +%s)
-      age=$(( now - lock_time ))
-      if [[ $age -lt $STALE_THRESHOLD ]]; then
-        echo "Error: Lock held by PID $locked_pid (${age}s old, threshold ${STALE_THRESHOLD}s)" >&2
-        exit 1
-      fi
-      echo "Warning: Breaking stale lock from PID $locked_pid (${age}s old)" >&2
+# Try to acquire lock atomically via mkdir
+if ! mkdir "$lockfile" 2>/dev/null; then
+  # Lock exists — check staleness
+  lock_time_file="$lockfile/.timestamp"
+  if [[ -f "$lock_time_file" ]]; then
+    lock_time=$(cat "$lock_time_file" 2>/dev/null || echo "0")
+    now=$(date +%s)
+    age=$(( now - lock_time ))
+    if [[ $age -ge $STALE_THRESHOLD ]]; then
+      echo "Warning: Breaking stale lock (${age}s old, threshold ${STALE_THRESHOLD}s)" >&2
+      rm -rf "$lockfile"
+      mkdir "$lockfile"
+    else
+      echo "Error: Lock held (${age}s old, threshold ${STALE_THRESHOLD}s)" >&2
+      exit 1
     fi
+  else
+    echo "Error: Lock directory exists" >&2
+    exit 1
   fi
 fi
-
-# Acquire lock
-printf '%s\n%s\n' "$$" "$(date +%s)" > "$lockfile"
+echo "$(date +%s)" > "$lockfile/.timestamp"
 
 # Run command, propagate exit code
 "$command" "$@"

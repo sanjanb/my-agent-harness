@@ -4,6 +4,8 @@
 # Always exits 0 — logging must never fail.
 set -uo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 VALID_LEVELS="debug info warn error critical"
 
 usage() {
@@ -29,16 +31,6 @@ mkdir -p "$log_dir" 2>/dev/null || true
 
 # Build JSON line — handle special chars in message
 ts=$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ" 2>/dev/null || date -u +"%Y-%m-%dT%H:%M:%SZ")
-
-# Escape JSON string: backslash, double-quote, newlines, tabs
-escape_json() {
-  local s="$1"
-  s="${s//\\/\\\\}"
-  s="${s//\"/\\\"}"
-  s="${s//$'\n'/\\n}"
-  s="${s//$'\t'/\\t}"
-  echo "$s"
-}
 
 msg_escaped=$(escape_json "$message")
 corr_escaped=$(escape_json "$corr")

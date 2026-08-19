@@ -3,14 +3,14 @@
 # Usage: ./quality-gate.sh <workflow_id> <worktree_path> [--json]
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 HAS_JQ=false; command -v jq &>/dev/null && HAS_JQ=true
 usage() { echo "Usage: $0 <workflow_id> <worktree_path> [--json]" >&2; exit 1; }
 [[ $# -ge 2 ]] || usage
 wf="$1"; worktree="$2"; json_only=false; [[ "${3:-}" == "--json" ]] && json_only=true
 [[ -d "$worktree" ]] || { echo "Error: '$worktree' not found" >&2; exit 1; }
 
-now_iso() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
-escape_json() { local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/\\n}"; s="${s//$'\t'/\\t}"; echo "$s"; }
 cp() { echo '{"check":"'"$1"'","pass":'"$2"',"detail":"'"$(escape_json "$3")"'"}'; }
 
 # Collect changed files

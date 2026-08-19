@@ -3,6 +3,8 @@
 # Usage: ./trace.sh {start|add|show|timeline} <args...>
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 HAS_JQ=false
 command -v jq &>/dev/null && HAS_JQ=true
@@ -19,16 +21,6 @@ EOF
 }
 
 trace_file() { echo ".opencode/workflows/$1/trace.jsonl"; }
-now_iso()    { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
-
-escape_json() {
-  local s="$1"
-  s="${s//\\/\\\\}"
-  s="${s//\"/\\\"}"
-  s="${s//$'\n'/\\n}"
-  s="${s//$'\t'/\\t}"
-  echo "$s"
-}
 
 [[ $# -ge 1 ]] || usage
 action="$1"; shift

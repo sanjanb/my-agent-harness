@@ -3,6 +3,8 @@
 # Usage: ./replay.sh {record|show|diff|prune} <args...>
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 HAS_JQ=false
 command -v jq &>/dev/null && HAS_JQ=true
 
@@ -17,11 +19,6 @@ usage() {
 
 rdir() { echo ".opencode/workflows/$1/replay"; }
 sfile() { echo "$(rdir "$1")/step-$2.json"; }
-now_iso() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
-
-escape_json() {
-  local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/\\n}"; s="${s//$'\t'/\\t}"; echo "$s"
-}
 
 [[ $# -ge 1 ]] || usage
 action="$1"; shift

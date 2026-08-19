@@ -3,6 +3,8 @@
 # Usage: ./convention.sh {add|get|list|search|consolidate} <args...>
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 HAS_JQ=false; command -v jq &>/dev/null && HAS_JQ=true
 CONV_FILE=".opencode/conventions.jsonl"
 
@@ -18,8 +20,6 @@ EOF
   exit 1
 }
 
-escape_json() { local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/\\n}"; s="${s//$'\t'/\\t}"; echo "$s"; }
-now_iso() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 ensure_file() { mkdir -p "$(dirname "$CONV_FILE")" 2>/dev/null || true; [[ -f "$CONV_FILE" ]] || touch "$CONV_FILE"; }
 write_entry() { printf '{"key":"%s","value":"%s","source":"%s","timestamp":"%s","uses":1}\n' "$(escape_json "$1")" "$(escape_json "$2")" "$3" "$(now_iso)" >> "$CONV_FILE"; }
 

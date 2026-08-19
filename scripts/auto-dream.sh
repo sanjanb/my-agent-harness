@@ -3,6 +3,8 @@
 # Usage: ./auto-dream.sh <workflow_id> [--dry-run]
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 HAS_JQ=false; command -v jq &>/dev/null && HAS_JQ=true
 usage() { echo "Usage: $0 <workflow_id> [--dry-run]" >&2; exit 1; }
 [[ $# -ge 1 ]] || usage
@@ -10,9 +12,6 @@ wf="$1"; dry_run=false; [[ "${2:-}" == "--dry-run" ]] && dry_run=true
 
 wf_dir=".opencode/workflows/$wf"
 [[ -d "$wf_dir" ]] || { echo "Error: Workflow '$wf' not found in .opencode/workflows/" >&2; exit 1; }
-
-now_iso() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
-escape_json() { local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/\\n}"; s="${s//$'\t'/\\t}"; echo "$s"; }
 
 # Collect learnings from multiple sources
 patterns=(); anti_patterns=(); preferences=(); decisions=()

@@ -3,13 +3,14 @@
 # Usage: ./task-board.sh {init|claim|release|complete|status|stale} <args...>
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 HAS_JQ=false
 command -v jq &>/dev/null && HAS_JQ=true
 
 usage() { echo "Usage: $0 {init|claim|release|complete|status|stale} <args...>" >&2; exit 1; }
 board_file() { echo ".opencode/workflows/$1/task-board.json"; }
-now_iso() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 
 ensure_board() {
   local f; f=$(board_file "$1")

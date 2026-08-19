@@ -4,7 +4,7 @@
 
 A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](https://opencode.ai) (v1.18.4). This is my development harness, a complete agent ecosystem for planning, coding, researching, reviewing, and shipping software with AI that follows real engineering discipline.
 
-## ▸ Table of Contents
+## [+] Table of Contents
 
 - [Architecture](#architecture)
 - [Agent Roster](#agent-roster)
@@ -18,7 +18,7 @@ A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](htt
 - [Built With](#built-with)
 - [License](#license)
 
-## ▸ Architecture
+## [+] Architecture
 
 The harness operates on a **4-layer architecture** that separates concerns from human intent through to deterministic execution, keeping probabilistic LLM decisions safely away from business logic.
 
@@ -69,24 +69,24 @@ graph TD
     PLUGINS --> MCPS
     MCPS --> TOOLS
 
-    style L1 fill:#1a1a2e,stroke:#e94560,color:#fff
-    style L2 fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style L3 fill:#16213e,stroke:#4a90d9,color:#fff
-    style L4 fill:#0f3460,stroke:#53d769,color:#fff
-    style INT1 fill:#2d1b1b,stroke:#e94560,color:#fff
-    style INT2 fill:#2d1b1b,stroke:#e94560,color:#fff
-    style INT3 fill:#2d1b1b,stroke:#e94560,color:#fff
-    style DIR1 fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style DIR2 fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style DIR3 fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style DIR4 fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style ORCH fill:#16213e,stroke:#4a90d9,color:#fff
-    style AGENTS fill:#16213e,stroke:#4a90d9,color:#fff
-    style MODELS fill:#16213e,stroke:#4a90d9,color:#fff
-    style SKILLS fill:#16213e,stroke:#4a90d9,color:#fff
-    style PLUGINS fill:#0f3460,stroke:#53d769,color:#fff
-    style MCPS fill:#0f3460,stroke:#53d769,color:#fff
-    style TOOLS fill:#0f3460,stroke:#53d769,color:#fff
+    style L1 fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style L2 fill:#201d1d,stroke:#007aff,color:#fdfcfc
+    style L3 fill:#424245,stroke:#007aff,color:#fdfcfc
+    style L4 fill:#646262,stroke:#30d158,color:#fdfcfc
+    style INT1 fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style INT2 fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style INT3 fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style DIR1 fill:#201d1d,stroke:#007aff,color:#fdfcfc
+    style DIR2 fill:#201d1d,stroke:#007aff,color:#fdfcfc
+    style DIR3 fill:#201d1d,stroke:#007aff,color:#fdfcfc
+    style DIR4 fill:#201d1d,stroke:#007aff,color:#fdfcfc
+    style ORCH fill:#424245,stroke:#007aff,color:#fdfcfc
+    style AGENTS fill:#424245,stroke:#007aff,color:#fdfcfc
+    style MODELS fill:#424245,stroke:#007aff,color:#fdfcfc
+    style SKILLS fill:#424245,stroke:#007aff,color:#fdfcfc
+    style PLUGINS fill:#646262,stroke:#30d158,color:#fdfcfc
+    style MCPS fill:#646262,stroke:#30d158,color:#fdfcfc
+    style TOOLS fill:#646262,stroke:#30d158,color:#fdfcfc
 ```
 
 ### Layer-by-Layer Breakdown
@@ -105,11 +105,11 @@ graph LR
     P -->|"config merge"| OUT
     R -->|"agent routing"| OUT
 
-    style U fill:#e94560,stroke:#ff6b6b,color:#fff
-    style C fill:#4a0000,stroke:#e94560,color:#fff
-    style P fill:#4a0000,stroke:#e94560,color:#fff
-    style R fill:#4a0000,stroke:#e94560,color:#fff
-    style OUT fill:#0f3460,stroke:#4a90d9,color:#fff
+    style U fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style C fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style P fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style R fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style OUT fill:#201d1d,stroke:#007aff,color:#fdfcfc
 ```
 
 #### Layer 2 → Directive (Config Layer)
@@ -199,28 +199,28 @@ graph TD
     R5 --> R6
     R6 --> R7
 
-    style Plugins fill:#0f3460,stroke:#53d769,color:#fff
-    style MCP fill:#0f3460,stroke:#4a90d9,color:#fff
-    style Scripts fill:#16213e,stroke:#e94560,color:#fff
-    style Ext fill:#1a1a2e,stroke:#888,color:#fff
-    style BG fill:#0f3460,stroke:#53d769,color:#fff
-    style WT fill:#0f3460,stroke:#53d769,color:#fff
-    style NT fill:#0f3460,stroke:#53d769,color:#fff
-    style KD fill:#0f3460,stroke:#53d769,color:#fff
-    style C7 fill:#0f3460,stroke:#4a90d9,color:#fff
-    style CX fill:#0f3460,stroke:#4a90d9,color:#fff
-    style EX fill:#0f3460,stroke:#4a90d9,color:#fff
-    style GH fill:#0f3460,stroke:#4a90d9,color:#fff
-    style R1 fill:#16213e,stroke:#e94560,color:#fff
-    style R2 fill:#16213e,stroke:#e94560,color:#fff
-    style R3 fill:#16213e,stroke:#e94560,color:#fff
-    style R4 fill:#16213e,stroke:#e94560,color:#fff
-    style R5 fill:#16213e,stroke:#e94560,color:#fff
-    style R6 fill:#16213e,stroke:#e94560,color:#fff
-    style R7 fill:#16213e,stroke:#e94560,color:#fff
-    style GIT fill:#1a1a2e,stroke:#888,color:#fff
-    style NPM fill:#1a1a2e,stroke:#888,color:#fff
-    style SH fill:#1a1a2e,stroke:#888,color:#fff
+    style Plugins fill:#646262,stroke:#30d158,color:#fdfcfc
+    style MCP fill:#646262,stroke:#007aff,color:#fdfcfc
+    style Scripts fill:#424245,stroke:#ff9f0a,color:#fdfcfc
+    style Ext fill:#302c2c,stroke:#9a9898,color:#fdfcfc
+    style BG fill:#646262,stroke:#30d158,color:#fdfcfc
+    style WT fill:#646262,stroke:#30d158,color:#fdfcfc
+    style NT fill:#646262,stroke:#30d158,color:#fdfcfc
+    style KD fill:#646262,stroke:#30d158,color:#fdfcfc
+    style C7 fill:#646262,stroke:#007aff,color:#fdfcfc
+    style CX fill:#646262,stroke:#007aff,color:#fdfcfc
+    style EX fill:#646262,stroke:#007aff,color:#fdfcfc
+    style GH fill:#646262,stroke:#007aff,color:#fdfcfc
+    style R1 fill:#424245,stroke:#ff9f0a,color:#fdfcfc
+    style R2 fill:#424245,stroke:#ff9f0a,color:#fdfcfc
+    style R3 fill:#424245,stroke:#ff9f0a,color:#fdfcfc
+    style R4 fill:#424245,stroke:#ff9f0a,color:#fdfcfc
+    style R5 fill:#424245,stroke:#ff9f0a,color:#fdfcfc
+    style R6 fill:#424245,stroke:#ff9f0a,color:#fdfcfc
+    style R7 fill:#424245,stroke:#ff9f0a,color:#fdfcfc
+    style GIT fill:#302c2c,stroke:#9a9898,color:#fdfcfc
+    style NPM fill:#302c2c,stroke:#9a9898,color:#fdfcfc
+    style SH fill:#302c2c,stroke:#9a9898,color:#fdfcfc
 ```
 
 ### Request Flow (End-to-End)
@@ -247,19 +247,19 @@ graph LR
 
     REQ --> CFG --> PLAN --> EXEC
 
-    style L1 fill:#e94560,stroke:#ff6b6b,color:#fff
-    style L2 fill:#0f3460,stroke:#4a90d9,color:#fff
-    style L3 fill:#16213e,stroke:#4a90d9,color:#fff
-    style L4 fill:#0f3460,stroke:#53d769,color:#fff
-    style REQ fill:#2d1b1b,stroke:#e94560,color:#fff
-    style CFG fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style PLAN fill:#16213e,stroke:#4a90d9,color:#fff
-    style EXEC fill:#0f3460,stroke:#53d769,color:#fff
+    style L1 fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style L2 fill:#201d1d,stroke:#007aff,color:#fdfcfc
+    style L3 fill:#424245,stroke:#007aff,color:#fdfcfc
+    style L4 fill:#646262,stroke:#30d158,color:#fdfcfc
+    style REQ fill:#302c2c,stroke:#ff9f0a,color:#fdfcfc
+    style CFG fill:#201d1d,stroke:#007aff,color:#fdfcfc
+    style PLAN fill:#424245,stroke:#007aff,color:#fdfcfc
+    style EXEC fill:#646262,stroke:#30d158,color:#fdfcfc
 ```
 
 **Key principle:** LLMs (Layer 3) never directly execute business logic. They route and plan; Layer 4 carries out the actual work deterministically.
 
-## ▸ Agent Roster
+## [+] Agent Roster
 
 19 specialist agents organized into 6 functional categories:
 
@@ -317,7 +317,7 @@ graph LR
 | **babysit-merge** | CI watcher: monitors PR checks and auto-merges when all pass. Does not fix CI failures. Uses 5 runtime scripts for merge operations and cleanup. |
 | **observability** | Observability layer: tracks agent metrics, traces workflow execution, surfaces system health and bottlenecks. Uses 6 runtime scripts for session replay, correlation tracing, and health checks. |
 
-## ▸ Plugins
+## [+] Plugins
 
 ### TypeScript Plugins
 
@@ -342,7 +342,7 @@ graph LR
 | `opencode-review` | Review workflow automation |
 | `@dietrichgebert/ponytail` | Ponytail mode (lazy dev philosophy) |
 
-## ▸ Skills
+## [+] Skills
 
 ### Custom Skills
 
@@ -374,7 +374,7 @@ A full suite of workflow skills prefixed with `gstack-` for structured developme
 
 Community-curated skills: `mp-implement`, `mp-research`, `mp-tdd`, `mp-code-review`, `mp-codebase-design`, `mp-diagnosing-bugs`, `mp-domain-modeling`, `mp-wayfinder`, `mp-handoff`, `mp-teach`, `mp-grill-me`, `mp-resolving-merge-conflicts`, `mp-edit-article`, `mp-obsidian-vault`, `mp-prototype`, `mp-scaffold-exercises`, `mp-triage`, `mp-to-spec`, `mp-to-tickets`, `mp-writing-great-skills`, and more.
 
-## ▸ Model Routing
+## [+] Model Routing
 
 The `oh-my-opencode-slim.json` preset configures 6 specialized model roles with tiered capability:
 
@@ -389,7 +389,7 @@ The `oh-my-opencode-slim.json` preset configures 6 specialized model roles with 
 
 The **tmux multiplexer** runs with a `main-vertical` layout at 60% main pane size, enabling parallel agent workflows side-by-side.
 
-## ▸ MCP Servers
+## [+] MCP Servers
 
 | Server | URL | Purpose |
 |--------|-----|---------|
@@ -398,7 +398,7 @@ The **tmux multiplexer** runs with a `main-vertical` layout at 60% main pane siz
 | **exa** | `mcp.exa.ai` | Web search and content discovery |
 | **gh_grep** | `mcp.grep.app` | GitHub code search and pattern matching |
 
-## ▸ Quick Start
+## [+] Quick Start
 
 ### Prerequisites
 
@@ -442,7 +442,7 @@ The installer CLI will automatically:
 
 **Short alias:** `mah` works as a shorthand CLI command (`npm link`).
 
-## ▸ Memory System
+## [+] Memory System
 
 The harness incorporates a 4-tier memory architecture to preserve context and learn across sessions:
 
@@ -498,7 +498,7 @@ opencode skill list     # should show managed + gstack skills
 opencode run review     # test a review command
 ```
 
-## ▸ Configuration
+## [+] Configuration
 
 ### Core Files
 
@@ -522,7 +522,7 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 - **plan agent** (mode: `primary`): Edit/write/bash denied, delegation read/list allowed, worktree management allowed: purpose-built as a read-only orchestrator
 - **scribe agent**: Bash denied, edit/write/read/glob allowed: content creation without shell access
 
-## ▸ Project Structure
+## [+] Project Structure
 
 ```
 .config/opencode/
@@ -602,7 +602,7 @@ The harness uses a **deny-by-default** permission model with per-agent overrides
 └── package.json               # Plugin dependencies
 ```
 
-## ▸ Philosophy
+## [+] Philosophy
 
 This harness is governed by two code philosophy mandates that every agent must load before implementation:
 
@@ -611,7 +611,7 @@ This harness is governed by two code philosophy mandates that every agent must l
 
 These are non-negotiable. The `tools/philosophy.md` directive enforces that agents select, load, and verify against the relevant philosophy before writing a single line of code.
 
-## ▸ Runtime
+## [+] Runtime
 
 The harness includes 32 bash scripts in `scripts/` that provide deterministic execution for orchestration operations. Agents read markdown instructions for decision-making and call scripts for reliable mechanical execution.
 
@@ -635,7 +635,7 @@ The harness includes 32 bash scripts in `scripts/` that provide deterministic ex
 - **JSONL format**: append-only, crash-safe, clean git diffs
 - **`set -euo pipefail`**: fail-fast on any error
 
-## ▸ Built With
+## [+] Built With
 
 - [OpenCode](https://opencode.ai): AI-native development platform
 - [`@opencode-ai/plugin`](https://www.npmjs.com/package/@opencode-ai/plugin) v1.18.4: Plugin SDK
@@ -651,7 +651,7 @@ The harness includes 32 bash scripts in `scripts/` that provide deterministic ex
 - [zod](https://zod.dev): Schema validation
 - [node-notifier](https://github.com/mikaelbr/node-notifier): Desktop notifications
 
-## ▸ License
+## [+] License
 
 MIT © 2026
 

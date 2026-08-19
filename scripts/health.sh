@@ -3,10 +3,11 @@
 # Usage: ./health.sh <workflow_id> | ./health.sh full
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 HAS_JQ=false
 command -v jq &>/dev/null && HAS_JQ=true
 BD=".opencode/workflows"
-now_iso() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 
 check_file() {
   local path="$1" name="$2"

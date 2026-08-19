@@ -3,6 +3,8 @@
 # Usage: ./evaluate.sh <workflow_id> <worktree_path> [--iteration N]
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib/utils.sh"
+
 HAS_JQ=false; command -v jq &>/dev/null && HAS_JQ=true
 usage() { echo "Usage: $0 <workflow_id> <worktree_path> [--iteration N]" >&2; exit 1; }
 [[ $# -ge 2 ]] || usage
@@ -60,8 +62,6 @@ if (( iteration >= 3 )); then
   echo "{\"workflow\":\"$wf\",\"iteration\":$iteration,\"recommendation\":\"ESCALATE\",\"reason\":\"Max iterations reached\"}"
   exit 0
 fi
-
-escape_json() { local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/\\n}"; s="${s//$'\t'/\\t}"; echo "$s"; }
 
 result="{\"workflow\":\"$(escape_json "$wf")\",\"correctness\":$s_correctness,\"robustness\":$s_robustness,\"clarity\":$s_clarity,\"philosophy\":$s_philosophy,\"minimalism\":$s_minimalism,\"total\":$total,\"recommendation\":\"$rec\",\"iteration\":$iteration}"
 

@@ -5,3 +5,4 @@ bun.lock
 .env
 .opencode/
 scripts/jq.exe
+.slim/deepwork/
