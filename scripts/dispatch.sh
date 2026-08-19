@@ -28,13 +28,48 @@ corr_id=$("$SCRIPT_DIR/correlation.sh" generate "$wf_id" "$step" "$agent")
 # Log dispatch event
 "$SCRIPT_DIR/log.sh" info "dispatch" "Dispatching agent=$agent step=$step" "$corr_id"
 
-# Build JSON output
+# Agent type mapping
+get_subagent_type() {
+  case "$1" in
+    explorer|explore)        echo "explore" ;;
+    fixer|coder)             echo "fixer" ;;
+    designer)                echo "designer" ;;
+    oracle|reviewer)         echo "oracle" ;;
+    librarian|researcher)    echo "librarian" ;;
+    test-engineer|test)      echo "development/test-engineer" ;;
+    devops)                  echo "development/devops-specialist" ;;
+    scribe|content)          echo "content/scribe" ;;
+    typescript|ts)           echo "development/typescript-pro" ;;
+    refactor)                echo "development/refactoring-specialist" ;;
+    mcp)                     echo "development/mcp-developer" ;;
+    orchestrator|build)      echo "orchestration/build" ;;
+    *)                       echo "general" ;;
+  esac
+}
+
+subagent_type=$(get_subagent_type "$agent")
+prompt=$(cat "$prompt_file")
+
+# Invoke agent via opencode run
+echo "$prompt" | opencode run \
+  --agent "$subagent_type" \
+  --auto \
+  --format json \
+  2>&1
+
+exit_code=$?
+
+# Build traceability JSON
 dispatched_at=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+status="completed"
+[[ $exit_code -ne 0 ]] && status="failed"
 
 if [[ -n "$task_id" ]]; then
-  printf '{"correlation_id":"%s","agent":"%s","prompt_file":"%s","task_id":"%s","dispatched_at":"%s"}\n' \
-    "$corr_id" "$agent" "$prompt_file" "$task_id" "$dispatched_at"
+  printf '{"correlation_id":"%s","agent":"%s","subagent_type":"%s","prompt_file":"%s","task_id":"%s","dispatched_at":"%s","status":"%s"}\n' \
+    "$corr_id" "$agent" "$subagent_type" "$prompt_file" "$task_id" "$dispatched_at" "$status"
 else
-  printf '{"correlation_id":"%s","agent":"%s","prompt_file":"%s","dispatched_at":"%s"}\n' \
-    "$corr_id" "$agent" "$prompt_file" "$dispatched_at"
+  printf '{"correlation_id":"%s","agent":"%s","subagent_type":"%s","prompt_file":"%s","dispatched_at":"%s","status":"%s"}\n' \
+    "$corr_id" "$agent" "$subagent_type" "$prompt_file" "$dispatched_at" "$status"
 fi
+
+exit $exit_code

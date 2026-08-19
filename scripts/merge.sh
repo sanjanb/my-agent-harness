@@ -19,9 +19,9 @@ cmd_merge() {
   # Stash any uncommitted changes
   git -C "$wt" stash push -m "merge-stash-$(date +%s)" 2>/dev/null || true
 
-  git checkout "$target" 2>&1 || { echo "Error: Failed to checkout $target" >&2; exit 1; }
+  git -C "$wt" checkout "$target" 2>&1 || { echo "Error: Failed to checkout $target" >&2; exit 1; }
 
-  if git merge --no-ff "$branch" -m "Merge '$branch' into $target" 2>&1; then
+  if git -C "$wt" merge --no-ff "$branch" -m "Merge '$branch' into $target" 2>&1; then
     "$LOG" info "merge" "Merged '$branch' into '$target'" "$wt"
     echo "OK: Merged '$branch' into '$target'"
   else

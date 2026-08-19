@@ -75,8 +75,7 @@ Workflow: $wf_id
 Step: $step
 Agent: $agent"
 
-# ── Dispatch Method Selection ───────────────────────────────────
-# Method 1: Write to dispatch file for orchestrator to pick up
+# ── Write dispatch JSON for traceability ──────────────────────
 dispatch_file="${SCRIPT_DIR}/../.opencode/workflows/${wf_id}/dispatch-${step}.json"
 mkdir -p "$(dirname "$dispatch_file")"
 
@@ -90,8 +89,30 @@ cat > "$dispatch_file" <<EOF
   "prompt_file": "$prompt_file",
   "worktree_dir": "$worktree_dir",
   "dispatched_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-  "status": "pending"
+  "status": "running"
 }
 EOF
 
-echo "$dispatch_file"
+# ── Invoke agent via opencode run ─────────────────────────────
+run_dir="${worktree_dir:-$SCRIPT_DIR/..}"
+
+# shellcheck disable=SC2086
+echo "$full_prompt" | opencode run \
+  --agent "$subagent_type" \
+  --dir "$run_dir" \
+  --auto \
+  --format json \
+  2>&1
+
+exit_code=$?
+
+# Update dispatch status
+if [[ $exit_code -eq 0 ]]; then
+  sed -i 's/"status": "running"/"status": "completed"/' "$dispatch_file"
+else
+  sed -i 's/"status": "running"/"status": "failed"/' "$dispatch_file"
+fi
+
+"$SCRIPT_DIR/log.sh" info "agent-launcher" "Agent $agent exited with code=$exit_code corr=$corr_id" "$corr_id"
+
+exit $exit_code
