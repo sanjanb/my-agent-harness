@@ -259,6 +259,8 @@ graph LR
 
 **Key principle:** LLMs (Layer 3) never directly execute business logic. They route and plan; Layer 4 carries out the actual work deterministically.
 
+https://github.com/cursor/plugins/blob/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review/SKILL.md
+
 ## [+] Agent Roster
 
 19 specialist agents organized into 6 functional categories:
