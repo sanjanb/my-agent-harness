@@ -4,6 +4,16 @@
 
 A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](https://opencode.ai) (v1.18.4). This is my development harness, a complete agent ecosystem for planning, coding, researching, reviewing, and shipping software with AI that follows real engineering discipline.
 
+## Best Techniques to enhance TNCA (Terminal Native Coding Agents)
+- Proper verbalised skills one can use, [Matt Pocock skills](https://github.com/mattpocock/skills)
+- [Improve Skill](https://github.com/shadcn/improve): An agent skill that audits any codebase and writes implementation plans for other agents to execute (This skill is really good)
+- For large tasks, use Plan Mode (Shift + Tab): Forces Terminal Coding agent to read code thoroughly and generate a plan before making changes, tip: Smart model to plan + cheap and faster for implementation
+- [Best quality review practice](https://github.co m/cursor/plugins/blob/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review/SKILL.md)+[Improve Codebase Architecture](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)
+- Verification / Testing: Giving Claude ways to verify its work (writing tests first, linters, type checkers, screenshot/browser testing) before writing the actual code (writing tests only for main components, not for every line of the code)
+- For clean coding without the AI slop use [ponytail](https://github.com/DietrichGebert/ponytail), which will do the entire work with minimum lines of code using best philosophy
+- It takes a lot of tokens when running commands and getting its context, so use [RTK](https://github.com/rtk-ai/rtk)
+-  
+
 ## [+] Table of Contents
 
 - [Architecture](#architecture)
@@ -259,15 +269,6 @@ graph LR
 
 **Key principle:** LLMs (Layer 3) never directly execute business logic. They route and plan; Layer 4 carries out the actual work deterministically.
 
-## Best Techniques to enhance TNCA (Terminal Native Coding Agents)
-- For large tasks, use Plan Mode (Shift + Tab): Forces Terminal Coding agent  to read code thoroughly and generate a plan before making changes
-- [Best quality review practice](https://github.co m/cursor/plugins/blob/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review/SKILL.md)+[Improve Codebase Architecture](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)
-- [Improve Skill](https://github.com/shadcn/improve): An agent skill that audits any codebase and writes implementation plans for other agents to execute (This skill is really good)
-- Verification / Testing: Giving Claude ways to verify its work (writing tests first, linters, type checkers, screenshot/browser testing) before writing the actual code (writing tests only for main components, not for every line of the code)
-- Proper verbalised skills [Matt Pocock skills](https://github.com/mattpocock/skills)
-- For clean coding without the AI slop use [ponytail](https://github.com/DietrichGebert/ponytail), which will do the entire work with minimum lines of code using best philosophy
-- It takes a lot of tokens when running commands and getting its context, so use [RTK](https://github.com/rtk-ai/rtk)
--  
 
 ## [+] Agent Roster
 
