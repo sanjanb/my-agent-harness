@@ -27,20 +27,6 @@ A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](htt
 | | **Sub-Agents** | Spawns specialized mini-agents (researcher, debugger) with isolated context windows (drains tokens rapidly on $20 plans). |
 | | **Git Worktrees** | Isolates parallel agent sessions across separate Git branches to prevent file write conflicts. |
 
-## Best Techniques to enhance TNCA (Terminal Native Coding Agents)
-- Proper verbalised skills one can use, [Matt Pocock skills](https://github.com/mattpocock/skills), most of the skills that you can find here [skills.sh](https://www.skills.sh/)
-- [Improve Skill](https://github.com/shadcn/improve): An agent skill that audits any codebase and writes implementation plans for other agents to execute (This skill is really good)
-- For large tasks, use Plan Mode (Shift + Tab): Forces Terminal Coding agent to read code thoroughly and generate a plan before making changes, tip: Smart model to plan + cheap and faster for implementation
-- [Best quality review practice](https://github.com/cursor/plugins/blob/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review/SKILL.md)+[Improve Codebase Architecture](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)
-- Verification / Testing: Giving Claude ways to verify its work (writing tests first, linters, type checkers, screenshot/browser testing) before writing the actual code (writing tests only for main components, not for every line of the code)
-- MCP Best practices: same as skills, don't spam them, don't install a bunch of them, only use them to interact outside the codebase(don't use them as skills)
-- Underrated commands to use(claude edition): /voice, /btw, /teleport or /remote, shell mode(!), /radio
-- Context management (claude edition): Be as specific as possible in the prompt. Dumb zone (do not use the same session for <100k), for every new task use a new session. Prevent Research Tangents: Give specific file paths and direct prompts to stop Claude from reading irrelevant files and consuming tokens. Manual Compression: Run /compact manually before Claude automatically triggers it mid-task, [CAVEMAN](https://github.com/JuliusBrussee/caveman)
-- For clean coding without the AI slop use [ponytail](https://github.com/DietrichGebert/ponytail), which will do the entire work with minimum lines of code using best philosophy
-- It takes a lot of tokens when running commands and getting its context, so use [RTK](https://github.com/rtk-ai/rtk)
-- /Loop command: Runs AI cron-like automations on intervals (e.g., auto-resolving GitHub issues, running security sweeps). /Goal command (Not best for low tier, consumes a lot of tokens). 
-- Sub-Agents: Spawns mini Claude agents for dedicated roles (researcher, debugger). Highly effective, but drains token limits quickly on $20 plans
-- Git Worktrees: Runs parallel development across isolated Git branches
 
 
 ## [+] Table of Contents
