@@ -4,7 +4,7 @@
 
 A personalized AI agent orchestration setup built on [`@opencode-ai/plugin`](https://opencode.ai) (v1.18.4). This is my development harness, a complete agent ecosystem for planning, coding, researching, reviewing, and shipping software with AI that follows real engineering discipline.
 
-Best practices for Terminal Native Coding Agents (TNCAs):
+## Best practices for Terminal Native Coding Agents (TNCAs):
 
 | Category | Technique / Tool | Key Concept & Best Practice |
 | --- | --- | --- |
