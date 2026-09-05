@@ -260,10 +260,14 @@ graph LR
 **Key principle:** LLMs (Layer 3) never directly execute business logic. They route and plan; Layer 4 carries out the actual work deterministically.
 
 ## Best Techniques to enhance TNCA (Terminal Native Coding Agents)
-- [Best quality review practice](https://github.com/cursor/plugins/blob/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review/SKILL.md)
+- For large tasks, use Plan Mode (Shift + Tab): Forces Terminal Coding agent  to read code thoroughly and generate a plan before making changes
+- [Best quality review practice](https://github.co m/cursor/plugins/blob/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review/SKILL.md)+[Improve Codebase Architecture](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)
+- [Improve Skill](https://github.com/shadcn/improve): An agent skill that audits any codebase and writes implementation plans for other agents to execute (This skill is really good)
 - Verification / Testing: Giving Claude ways to verify its work (writing tests first, linters, type checkers, screenshot/browser testing) before writing the actual code (writing tests only for main components, not for every line of the code)
 - Proper verbalised skills [Matt Pocock skills](https://github.com/mattpocock/skills)
-- For proper coding philosophy without the AI slop [ponytail](https://github.com/DietrichGebert/ponytail)
+- For clean coding without the AI slop use [ponytail](https://github.com/DietrichGebert/ponytail), which will do the entire work with minimum lines of code using best philosophy
+- It takes a lot of tokens when running commands and getting its context, so use [RTK](https://github.com/rtk-ai/rtk)
+-  
 
 ## [+] Agent Roster
 
